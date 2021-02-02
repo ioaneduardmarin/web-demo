@@ -1,0 +1,14 @@
+{
+  "name": "web-demo",
+  "version": "1.0.0",
+  "description": "My TODO App",
+  "main": "script.js",
+  "scripts": {
+    "start": "lite-server"
+  },
+  "author": "Marin Eduard",
+  "license": "ISC",
+  "devDependencies": {
+    "lite-server": "^2.5.4"
+  }
+}
