@@ -8,10 +8,6 @@ function getToDoTextBoxText() {
     return document.getElementById('addTodoTextBox').value;
 }
 
-function getToDoItemText(id) {
-    return document.getElementById(id).textContent.text;
-}
-
 function doTodoItemsExist() {
     let number = document.getElementById('toDoList').childElementCount;
     if (parseInt(number) > 0) {
