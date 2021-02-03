@@ -89,16 +89,17 @@ function prepareToDoItem(toDoItemText) {
 }
 
 function deleteToDoItem(id) {
-    let toBeDeleted = document.getElementById(`${id}`);
+    let toBeDeleted = document.getElementById(id);
     toBeDeleted.parentNode.removeChild(toBeDeleted);
     app.toDoItems.slice(app.toDoItems.indexOf(toBeDeleted), app.toDoItems.indexOf(toBeDeleted) + 1);
 }
 
 function editToDoItem(id) {
     let toBeEdited = document.getElementById(id);
-    toBeEdited.contentEditable = false;
-    if (!toBeEdited.innerText) {
-        deleteToDoItem(id);
+    if (toBeEdited.innerText.slice(0, toBeEdited.innerText.indexOf("XEdit Item"))) {
+        app.toDoItems.splice(app.toDoItems.indexOf(toBeEdited), 1, toBeEdited);
+        toBeEdited.contentEditable = false;
+        return;
     }
-    app.toDoItems.splice(app.toDoItems.indexOf(toBeEdited), 1, toBeEdited);
+    deleteToDoItem(id);
 }
