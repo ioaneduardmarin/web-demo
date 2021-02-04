@@ -52,10 +52,14 @@ function addToDoItem(toDoItemText) {
         setTextIfNoToDoItems();
     });
 
+    newEntry.addEventListener('click', function (event) {
+        toDoItemSpan.focus(true);
+    });
+
     list.appendChild(newEntry);
     setToDoTextBoxText();
     app.toDoItems.push(newEntry);
-    app.addedItemsTimeLog.push(newEntry, getCurrentDate());
+    app.addedItemsTimeLog.push(toDoItemSpan.textContent, getCurrentDate());
 }
 
 function prepareToDoItemRemovalAnchor() {
@@ -82,9 +86,8 @@ function prepareToDoItemSpan(toDoItemText) {
     span.class = 'toDoItemText';
     span.id = `toDoItemSpan${app.numberOfToDoItems}`;
     span.textContent = toDoItemText;
-    span.addEventListener('click', function () {
-        span.contentEditable = true;
-    });
+    span.contentEditable = true;
+    span.spellcheck = false;
     return span;
 }
 
@@ -92,12 +95,11 @@ function deleteToDoItem(id) {
     let toBeDeleted = document.getElementById(id);
     toBeDeleted.parentNode.removeChild(toBeDeleted);
     app.toDoItems.slice(app.toDoItems.indexOf(toBeDeleted), app.toDoItems.indexOf(toBeDeleted) + 1);
-    app.removedItemsTimeLog.push(toBeDeleted, getCurrentDate());
+    app.removedItemsTimeLog.push(toBeDeleted.firstElementChild.textContent, getCurrentDate());
 }
 
 function editToDoItem(id) {
     let toBeEdited = document.getElementById(id);
-    toBeEdited.contentEditable = false;
     if (toBeEdited.textContent) {
         app.toDoItems.splice(app.toDoItems.indexOf(toBeEdited), 1, toBeEdited);
         return;
