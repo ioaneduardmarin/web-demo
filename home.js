@@ -7,9 +7,8 @@ addButton.addEventListener('click', function () {
     setTextIfNoToDoItems();
 });
 
-//document.addEventListener("keyup", function (event) {
-//    if (document.activeElement === document.getElementById('addTodoTextBox') && event.keyCode === 13) {
-//        addToDoItem(getToDoTextBoxText());
-//        setTextIfNoToDoItems();
-//    }
-//});
+document.getElementById('toDoForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+    addToDoItem(getToDoTextBoxText());
+    setTextIfNoToDoItems();
+});
