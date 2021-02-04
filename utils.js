@@ -1,11 +1,17 @@
 // JavaScript source code
 const app = {
     numberOfToDoItems: 0,
-    toDoItems: []
+    toDoItems: [],
+    addedItemsTimeLog: [],
+    removedItemsTimeLog: []
 };
 
 function getToDoTextBoxText() {
     return document.getElementById('addTodoTextBox').value;
+}
+
+function setToDoTextBoxText() {
+    document.getElementById('addTodoTextBox').value = '';
 }
 
 function doTodoItemsExist() {
@@ -22,18 +28,23 @@ function setTextIfNoToDoItems() {
 
 function addToDoItem(toDoItemText) {
     if (!toDoItemText) {
-        alert("Introduce a valid item!");
         return;
     }
 
     app.numberOfToDoItems++;
     let list = document.getElementById('toDoList');
-    let newEntry = prepareToDoItem(toDoItemText);
+    let newEntry = prepareToDoItem();
+    let toDoItemSpan = prepareToDoItemSpan(toDoItemText);
     let removalAnchor = prepareToDoItemRemovalAnchor();
-    let editingAnchor = prepareToDoItemEditingAnchor();
 
+    newEntry.appendChild(toDoItemSpan);
     newEntry.appendChild(removalAnchor);
-    newEntry.appendChild(editingAnchor);
+
+    toDoItemSpan.addEventListener('blur', function (event) {
+        editToDoItem(toDoItemSpan.id);
+        event.preventDefault();
+        setTextIfNoToDoItems();
+    });
 
     removalAnchor.addEventListener('click', function (event) {
         deleteToDoItem(newEntry.id);
@@ -41,14 +52,10 @@ function addToDoItem(toDoItemText) {
         setTextIfNoToDoItems();
     });
 
-    editingAnchor.addEventListener('click', function (event) {
-        editToDoItem(newEntry.id);
-        event.preventDefault();
-        setTextIfNoToDoItems();
-    });
-
     list.appendChild(newEntry);
+    setToDoTextBoxText();
     app.toDoItems.push(newEntry);
+    app.addedItemsTimeLog.push(newEntry, getCurrentDate());
 }
 
 function prepareToDoItemRemovalAnchor() {
@@ -62,40 +69,43 @@ function prepareToDoItemRemovalAnchor() {
     return anchor;
 }
 
-function prepareToDoItemEditingAnchor() {
-    let anchor = document.createElement('a');
-    anchor.style.padding = "3px 3px 3px 0px";
-    anchor.className = 'editingToDoAnchor';
-    anchor.id = `editingToDoAnchor${app.numberOfToDoItems}`;
-    anchor.textContent = 'Edit Item';
-    anchor.href = '#';
-    anchor.role = 'button';
-    return anchor;
-}
-
-function prepareToDoItem(toDoItemText) {
+function prepareToDoItem() {
     let newEntry = document.createElement('li');
     newEntry.id = `toDoItem${app.numberOfToDoItems}`;
     newEntry.className = 'toDoItem';
-    newEntry.appendChild(document.createTextNode(toDoItemText));
-    newEntry.addEventListener('dblclick', function () {
-        newEntry.contentEditable = true;
-    });
     return newEntry;
+}
+
+function prepareToDoItemSpan(toDoItemText) {
+
+    let span = document.createElement('span');
+    span.class = 'toDoItemText';
+    span.id = `toDoItemSpan${app.numberOfToDoItems}`;
+    span.textContent = toDoItemText;
+    span.addEventListener('click', function () {
+        span.contentEditable = true;
+    });
+    return span;
 }
 
 function deleteToDoItem(id) {
     let toBeDeleted = document.getElementById(id);
     toBeDeleted.parentNode.removeChild(toBeDeleted);
     app.toDoItems.slice(app.toDoItems.indexOf(toBeDeleted), app.toDoItems.indexOf(toBeDeleted) + 1);
+    app.removedItemsTimeLog.push(toBeDeleted, getCurrentDate());
 }
 
 function editToDoItem(id) {
     let toBeEdited = document.getElementById(id);
-    if (toBeEdited.innerText.slice(0, toBeEdited.innerText.indexOf("XEdit Item"))) {
+    toBeEdited.contentEditable = false;
+    if (toBeEdited.textContent) {
         app.toDoItems.splice(app.toDoItems.indexOf(toBeEdited), 1, toBeEdited);
-        toBeEdited.contentEditable = false;
         return;
     }
-    deleteToDoItem(id);
+    deleteToDoItem(document.getElementById(id).parentNode.id);
+}
+
+function getCurrentDate() {
+    let date = new Date();
+    return date.toLocaleString();
 }

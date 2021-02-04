@@ -1,0 +1,4 @@
+﻿.toDoContainer span[id*="toDoItemSpan"]:focus {
+    background: yellow;
+    color: black;
+}
