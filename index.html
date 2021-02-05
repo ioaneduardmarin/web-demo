@@ -5,13 +5,20 @@
     <meta charset="utf-8" />
     <title>My TODO App</title>
     <link href="main.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="headerContainer">
+        <span>My ToDo App</span>
+    </div>
     <div class="toDoContainer">
         <form id="toDoForm">
-            <input class="toDoTextBox" id="addTodoTextBox" placeholder="Enter a TODO item" type="text"> <button id="addTodoButton" type="button">Add item</button>
+            <input class="toDoTextBox" id="addTodoTextBox" placeholder="Enter something you planned to do" type="text"> <button id="addTodoButton" type="button">Add item</button>
         </form>
-        <text id="noToDoItemInfo" hidden>There are no TODO items</text>
+        <div  id="noToDoItemInfo" hidden>
+            <span>There are no ToDo items</span>
+        </div>
         <ul id="toDoList" class="toDoItemsList">
         </ul>
     </div>

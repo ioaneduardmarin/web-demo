@@ -1,4 +1,62 @@
-﻿.toDoContainer span[id*="toDoItemSpan"]:focus {
-    background: yellow;
-    color: black;
+﻿body {
+    font-family: 'Lato', 'Segoe UI', Geneva, Verdana, sans-serif;
+    margin: auto;
+    text-align: center;
+    font-size: 25px;
+}
+
+html {
+    background-color: whitesmoke;
+    background-size: cover;
+}
+
+#toDoList {
+    position: center;
+    font-weight: bold;
+}
+
+#noToDoItemInfo {
+    margin-top: 25px;
+    font-size: 50px;
+    text-align: center;
+}
+
+.headerContainer {
+    background-color: teal;
+    color: white;
+    font-size: 70px;
+    font-family: 'Open Sans', sans-serif;
+    text-align: center;
+    padding: 10px;
+    border-bottom: 30px solid darkgrey;
+}
+
+#toDoForm {
+    display: flex;
+    justify-content: space-between;
+}
+
+    #toDoForm input {
+        text-align: center;
+        font-size: 30px;
+        font-family: 'Open Sans', sans-serif;
+        width: 85%;
+    }
+
+    #toDoForm button {
+        text-align: center;
+        width: 15%;
+        font-size: 30px;
+        background-color: darkgrey;
+        color: white;
+    }
+
+.toDoContainer span[id*="toDoItemSpan"]:focus {
+    background: teal;
+    color: white;
+}
+
+.toDoContainer span[id*="toDoItemSpan"]::selection {
+    background: lightseagreen;
+    color: white;
 }
