@@ -1,12 +1,22 @@
 ﻿body {
     font-family: 'Lato', 'Segoe UI', Geneva, Verdana, sans-serif;
     margin: auto;
+    min-height: 100vh;
+    width: 650px;
+    overflow-y: scroll;
+    overflow-x: hidden;
     text-align: center;
+    color: white;
     font-size: 25px;
+    background-color: lightseagreen;
+    border: 10px solid grey;
 }
 
 html {
-    background-color: whitesmoke;
+    background: url(images/backgroundImage.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
     background-size: cover;
 }
 
@@ -22,41 +32,48 @@ html {
 }
 
 .headerContainer {
-    background-color: teal;
+    background-color: lightseagreen;
     color: white;
     font-size: 70px;
     font-family: 'Open Sans', sans-serif;
     text-align: center;
     padding: 10px;
-    border-bottom: 30px solid darkgrey;
+    border-bottom: 10px solid grey;
 }
 
 #toDoForm {
     display: flex;
     justify-content: space-between;
+    border-bottom: 10px solid grey;
 }
 
     #toDoForm input {
         text-align: center;
-        font-size: 30px;
+        background-color: lightseagreen;
+        color: white;
+        font-size: 25px;
         font-family: 'Open Sans', sans-serif;
-        width: 85%;
+        width: 80%;
+    }
+
+    #toDoForm ::placeholder {
+        color: white
     }
 
     #toDoForm button {
         text-align: center;
-        width: 15%;
-        font-size: 30px;
-        background-color: darkgrey;
+        width: 20%;
+        font-size: 25px;
+        background-color: lightseagreen;
         color: white;
     }
 
 .toDoContainer span[id*="toDoItemSpan"]:focus {
-    background: teal;
+    background: grey;
     color: white;
 }
 
 .toDoContainer span[id*="toDoItemSpan"]::selection {
-    background: lightseagreen;
+    background: darkgrey;
     color: white;
 }

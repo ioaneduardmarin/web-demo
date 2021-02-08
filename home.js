@@ -1,4 +1,5 @@
-// JavaScript source code
+//JavaScript source code
+onLoad();
 setTextIfNoToDoItems();
 
 const addButton = document.getElementById('addTodoButton');

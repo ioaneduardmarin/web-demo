@@ -31,11 +31,16 @@ function addToDoItem(toDoItemText) {
         return;
     }
 
+    if (app.toDoItems.filter(e => e.contentText === 'toDoItemText').length > 0) {
+        return;
+    }
+
     app.numberOfToDoItems++;
     let list = document.getElementById('toDoList');
     let newEntry = prepareToDoItem();
     let toDoItemSpan = prepareToDoItemSpan(toDoItemText);
     let removalAnchor = prepareToDoItemRemovalAnchor();
+
 
     newEntry.appendChild(toDoItemSpan);
     newEntry.appendChild(removalAnchor);
@@ -52,14 +57,13 @@ function addToDoItem(toDoItemText) {
         setTextIfNoToDoItems();
     });
 
-    newEntry.addEventListener('click', function (event) {
-        toDoItemSpan.focus(true);
-    });
-
+    let toDoObject = new ToDoObject(newEntry.id, toDoItemSpan.textContent);
     list.appendChild(newEntry);
     setToDoTextBoxText();
-    app.toDoItems.push(newEntry);
-    app.addedItemsTimeLog.push(toDoItemSpan.textContent, getCurrentDate());
+
+    window.localStorage.setItem(toDoObject.toDoId, toDoObject.contentText);
+    app.toDoItems.push(toDoObject);
+    app.addedItemsTimeLog.push(toDoObject, getCurrentDate());
 }
 
 function prepareToDoItemRemovalAnchor() {
@@ -93,21 +97,53 @@ function prepareToDoItemSpan(toDoItemText) {
 
 function deleteToDoItem(id) {
     let toBeDeleted = document.getElementById(id);
+    let toDoObject = new ToDoObject(toBeDeleted.id, toBeDeleted.firstChild.textContent);
     toBeDeleted.parentNode.removeChild(toBeDeleted);
-    app.toDoItems.slice(app.toDoItems.indexOf(toBeDeleted), app.toDoItems.indexOf(toBeDeleted) + 1);
-    app.removedItemsTimeLog.push(toBeDeleted.firstElementChild.textContent, getCurrentDate());
+    app.toDoItems.slice(
+        app.toDoItems.indexOf(toDoObject),
+        app.toDoItems.indexOf(toDoObject) + 1);
+    app.removedItemsTimeLog.push(toDoObject, getCurrentDate());
+    window.localStorage.removeItem(id);
 }
 
 function editToDoItem(id) {
     let toBeEdited = document.getElementById(id);
-    if (toBeEdited.textContent) {
-        app.toDoItems.splice(app.toDoItems.indexOf(toBeEdited), 1, toBeEdited);
+    let toDoObject = new ToDoObject(toBeEdited.id, toBeEdited.textContent);
+    if (toDoObject.contentText) {
+        app.toDoItems.splice(
+            app.toDoItems.indexOf(toDoObject), 1, toDoObject);
+        window.localStorage.removeItem(document.getElementById(id).parentNode.id);
+        window.localStorage.setItem(document.getElementById(id).parentNode.id, toDoObject.contentText);
         return;
     }
+    window.localStorage.removeItem(document.getElementById(id).parentNode.id);
     deleteToDoItem(document.getElementById(id).parentNode.id);
 }
 
 function getCurrentDate() {
     let date = new Date();
     return date.toLocaleString();
+}
+
+function onLoad() {
+    let myStorage = getMyStorage();
+    myStorage.forEach(element => addToDoItem(element));
+}
+
+function getMyStorage() {
+
+    var values = [],
+        keys = Object.keys(localStorage),
+        i = keys.length;
+
+    while (i--) {
+        values.push(localStorage.getItem(keys[i]));
+    }
+
+    return values;
+}
+
+function ToDoObject(identificaton, content) {
+    this.toDoId = identificaton;
+    this.contentText = content;
 }
