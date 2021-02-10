@@ -15,7 +15,7 @@ document.getElementById('toDoForm').addEventListener('submit', function (event) 
 });
 
 window.addEventListener('storage', (e) => {
-    
+    console.log("Declansez operatia de sincronizare a itemilor toDo intre tabele");
     popElements('toDoList');
     onLoad('storageEventListener');
     setTextIfNoToDoItems();

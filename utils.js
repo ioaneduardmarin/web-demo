@@ -57,6 +57,7 @@ function addToDoItem(toDoItemText) {
     list.appendChild(newEntry);
     setToDoTextBoxText();
 
+    console.log("Adaug un item nou in localStorage");
     window.localStorage.setItem(toDoObject.toDoId, toDoObject.contentText);
     app.toDoItems.push(toDoObject);
     app.addedItemsTimeLog.push(toDoObject, getCurrentDate());
@@ -124,8 +125,6 @@ function prepareToDoItemSpan(toDoItemText) {
 }
 
 function deleteToDoItem(id) {
-    console.log(app.toDoItems);
-    console.log(localStorage);
     let toBeDeleted = document.getElementById(id);
     if (!toBeDeleted) {
         return;
@@ -136,12 +135,10 @@ function deleteToDoItem(id) {
 
     const indexToBeDeleted = (app.toDoItems).findIndex(elem => elem.toDoId === toDoObject.toDoId);
     app.toDoItems = app.toDoItems.filter(elem => elem.toDoId !== toDoObject.toDoId);
-    
-    app.removedItemsTimeLog.push(toDoObject, getCurrentDate());
-    window.localStorage.removeItem(id);
 
-    console.log(app.toDoItems);
-    console.log(localStorage);
+    app.removedItemsTimeLog.push(toDoObject, getCurrentDate());
+    console.log("Elimin un item din localStorage");
+    window.localStorage.removeItem(id);
 }
 
 function editToDoItem(id) {
@@ -150,9 +147,11 @@ function editToDoItem(id) {
     const indexToBeEdited = (app.toDoItems).findIndex(elem => elem.toDoId === toDoObject.toDoId);
     if (toDoObject.contentText) {
         app.toDoItems.splice(indexToBeEdited, 1, toDoObject);
+        console.log("Editez un item  din localStorage");
         window.localStorage.setItem(document.getElementById(id).parentNode.id, toDoObject.contentText);
         return;
     }
+    console.log("Elimin un item din localStorage");
     window.localStorage.removeItem(document.getElementById(id).parentNode.id);
     deleteToDoItem(document.getElementById(id).parentNode.id);
 }
