@@ -1,5 +1,5 @@
 //JavaScript source code
-onLoad();
+onLoad('loadPage');
 setTextIfNoToDoItems();
 
 const addButton = document.getElementById('addTodoButton');
@@ -12,4 +12,15 @@ document.getElementById('toDoForm').addEventListener('submit', function (event) 
     event.preventDefault();
     addToDoItem(getToDoTextBoxText());
     setTextIfNoToDoItems();
+});
+
+window.addEventListener('storage', (e) => {
+    
+    popElements('toDoList');
+    onLoad('storageEventListener');
+    setTextIfNoToDoItems();
+});
+
+window.addEventListener('load',() => {
+    setToDoTextBoxText();
 });

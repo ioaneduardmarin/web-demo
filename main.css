@@ -23,6 +23,7 @@ html {
 #toDoList {
     position: center;
     font-weight: bold;
+    list-style-type: none;
 }
 
 #noToDoItemInfo {

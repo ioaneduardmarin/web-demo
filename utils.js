@@ -31,10 +31,6 @@ function addToDoItem(toDoItemText) {
         return;
     }
 
-    if (app.toDoItems.filter(e => e.contentText === 'toDoItemText').length > 0) {
-        return;
-    }
-
     app.numberOfToDoItems++;
     let list = document.getElementById('toDoList');
     let newEntry = prepareToDoItem();
@@ -57,13 +53,45 @@ function addToDoItem(toDoItemText) {
         setTextIfNoToDoItems();
     });
 
-    let toDoObject = new ToDoObject(newEntry.id, toDoItemSpan.textContent);
+    let toDoObject = { toDoId: newEntry.id, contentText: toDoItemSpan.textContent };
     list.appendChild(newEntry);
     setToDoTextBoxText();
 
     window.localStorage.setItem(toDoObject.toDoId, toDoObject.contentText);
     app.toDoItems.push(toDoObject);
     app.addedItemsTimeLog.push(toDoObject, getCurrentDate());
+}
+
+function addItemsOnUpdate(toDoItemText) {
+    if (!toDoItemText) {
+        return;
+    }
+
+    let list = document.getElementById('toDoList');
+    let newEntry = prepareToDoItem();
+    let toDoItemSpan = prepareToDoItemSpan(toDoItemText);
+    let removalAnchor = prepareToDoItemRemovalAnchor();
+
+
+    newEntry.appendChild(toDoItemSpan);
+    newEntry.appendChild(removalAnchor);
+
+    toDoItemSpan.addEventListener('blur', function (event) {
+        editToDoItem(toDoItemSpan.id);
+        event.preventDefault();
+        setTextIfNoToDoItems();
+    });
+
+    removalAnchor.addEventListener('click', function (event) {
+        deleteToDoItem(newEntry.id);
+        event.preventDefault();
+        setTextIfNoToDoItems();
+    });
+
+    let toDoObject = { toDoId: newEntry.id, contentText: toDoItemSpan.textContent };
+    list.appendChild(newEntry);
+    setToDoTextBoxText();
+    app.numberOfToDoItems++;
 }
 
 function prepareToDoItemRemovalAnchor() {
@@ -96,23 +124,32 @@ function prepareToDoItemSpan(toDoItemText) {
 }
 
 function deleteToDoItem(id) {
+    console.log(app.toDoItems);
+    console.log(localStorage);
     let toBeDeleted = document.getElementById(id);
-    let toDoObject = new ToDoObject(toBeDeleted.id, toBeDeleted.firstChild.textContent);
+    if (!toBeDeleted) {
+        return;
+    }
+
+    let toDoObject = { toDoId: id, contentText: toBeDeleted.firstChild.textContent };
     toBeDeleted.parentNode.removeChild(toBeDeleted);
-    app.toDoItems.slice(
-        app.toDoItems.indexOf(toDoObject),
-        app.toDoItems.indexOf(toDoObject) + 1);
+
+    const indexToBeDeleted = (app.toDoItems).findIndex(elem => elem.toDoId === toDoObject.toDoId);
+    app.toDoItems = app.toDoItems.filter(elem => elem.toDoId !== toDoObject.toDoId);
+    
     app.removedItemsTimeLog.push(toDoObject, getCurrentDate());
     window.localStorage.removeItem(id);
+
+    console.log(app.toDoItems);
+    console.log(localStorage);
 }
 
 function editToDoItem(id) {
     let toBeEdited = document.getElementById(id);
-    let toDoObject = new ToDoObject(toBeEdited.id, toBeEdited.textContent);
+    let toDoObject = { toDoId: id, contentText: toBeEdited.textContent };
+    const indexToBeEdited = (app.toDoItems).findIndex(elem => elem.toDoId === toDoObject.toDoId);
     if (toDoObject.contentText) {
-        app.toDoItems.splice(
-            app.toDoItems.indexOf(toDoObject), 1, toDoObject);
-        window.localStorage.removeItem(document.getElementById(id).parentNode.id);
+        app.toDoItems.splice(indexToBeEdited, 1, toDoObject);
         window.localStorage.setItem(document.getElementById(id).parentNode.id, toDoObject.contentText);
         return;
     }
@@ -125,25 +162,32 @@ function getCurrentDate() {
     return date.toLocaleString();
 }
 
-function onLoad() {
+function onLoad(caller) {
+    app.numberOfToDoItems = 0;
     let myStorage = getMyStorage();
-    myStorage.forEach(element => addToDoItem(element));
+    if (caller === 'storageEventListener') {
+        myStorage.forEach(element => addItemsOnUpdate(element));
+    }
+    else {
+        myStorage.forEach(element => addToDoItem(element));
+    }
 }
 
 function getMyStorage() {
 
-    var values = [],
-        keys = Object.keys(localStorage),
-        i = keys.length;
-
-    while (i--) {
-        values.push(localStorage.getItem(keys[i]));
-    }
-
+    let values = [];
+    let keys = Object.keys(localStorage);
+    let keyNumbers = [];
+    keys.forEach(key => keyNumbers.push(parseInt(key.slice(8))));
+    keyNumbers.sort(function (a, b) {
+        return a - b;
+    });
+    keyNumbers.forEach(k => values.push(localStorage.getItem(`toDoItem${k}`)));
+    console.log(values);
     return values;
 }
 
-function ToDoObject(identificaton, content) {
-    this.toDoId = identificaton;
-    this.contentText = content;
+function popElements(parentId) {
+    let toDoItems = document.querySelectorAll('#toDoList > .toDoItem');
+    toDoItems.forEach(element => element.parentNode.removeChild(element));
 }
