@@ -1,5 +1,5 @@
 //JavaScript source code
-onLoad('loadPage');
+onUpdate();
 setTextIfNoToDoItems();
 
 const addButton = document.getElementById('addTodoButton');
@@ -16,11 +16,10 @@ document.getElementById('toDoForm').addEventListener('submit', function (event) 
 
 window.addEventListener('storage', (e) => {
     console.log("Declansez operatia de sincronizare a itemilor toDo intre tabele");
-    popElements('toDoList');
-    onLoad('storageEventListener');
+    onUpdate();
     setTextIfNoToDoItems();
 });
 
-window.addEventListener('load',() => {
+window.addEventListener('load', () => {
     setToDoTextBoxText();
 });
