@@ -1,6 +1,6 @@
 // JavaScript source code
 const app = {
-    numberOfToDoItems: 0,
+    idOfLastEnteredToDoItem: 0,
     toDoItems: []
 };
 
@@ -25,17 +25,17 @@ function setTextIfNoToDoItems() {
 }
 
 function addToDoItem(toDoItemText) {
-    app.numberOfToDoItems = window.localStorage.getItem('numberOfItems');
-    app.numberOfToDoItems++;
+    app.idOfLastEnteredToDoItem = window.localStorage.getItem('numberOfItems');
+    app.idOfLastEnteredToDoItem++;
     if (!toDoItemText) {
         return;
     }
 
     let list = document.getElementById('toDoList');
-    let newEntry = prepareToDoItem();
-    let toDoItemSpan = prepareToDoItemSpan(toDoItemText);
-    let removalAnchor = prepareToDoItemRemovalAnchor();
-    window.localStorage.setItem('numberOfItems', app.numberOfToDoItems);
+    let newEntry = prepareToDoItem(app.idOfLastEnteredToDoItem);
+    let toDoItemSpan = prepareToDoItemSpan(toDoItemText, parseInt((newEntry.id).slice(8)));
+    let removalAnchor = prepareToDoItemRemovalAnchor(parseInt((newEntry.id).slice(8)));
+    window.localStorage.setItem('numberOfItems', parseInt((newEntry.id).slice(8)));
 
     newEntry.appendChild(toDoItemSpan);
     newEntry.appendChild(removalAnchor);
@@ -57,18 +57,18 @@ function addToDoItem(toDoItemText) {
     setToDoTextBoxText();
 
     console.log(`Adaug un item nou in localStorage ${toDoObject.toDoId} ${toDoObject.contentText}`);
-    console.log(app.numberOfToDoItems);
+    console.log(app.idOfLastEnteredToDoItem);
     window.localStorage.setItem(toDoObject.toDoId, toDoObject.contentText);
 }
 
 function addUpdatedToDoItems(toDoItemId, toDoItemText) {
     console.log(`Adaug doar in ul al noului tabel elementul ${toDoItemId} ${toDoItemText}`);
+    const idNumber = parseInt(toDoItemId.slice(8))
+    app.idOfLastEnteredToDoItem = idNumber;
     let list = document.getElementById('toDoList');
-    let newEntry = prepareToDoItem();
-    newEntry.id = toDoItemId;
-    let toDoItemSpan = prepareToDoItemSpan(toDoItemText);
-    let removalAnchor = prepareToDoItemRemovalAnchor();
-    app.numberOfToDoItems++;
+    let newEntry = prepareToDoItem(idNumber);
+    let toDoItemSpan = prepareToDoItemSpan(toDoItemText, idNumber);
+    let removalAnchor = prepareToDoItemRemovalAnchor(idNumber);
 
     newEntry.appendChild(toDoItemSpan);
     newEntry.appendChild(removalAnchor);
@@ -91,29 +91,29 @@ function addUpdatedToDoItems(toDoItemId, toDoItemText) {
     setToDoTextBoxText();
 }
 
-function prepareToDoItemRemovalAnchor() {
+function prepareToDoItemRemovalAnchor(idNumber) {
     let anchor = document.createElement('a');
     anchor.style.padding = "3px 3px 3px 5px";
     anchor.className = 'removalToDoAnchor';
-    anchor.id = `removalToDoAnchor${app.numberOfToDoItems}`;
+    anchor.id = `removalToDoAnchor${idNumber}`;
     anchor.textContent = 'X';
     anchor.href = '#';
     anchor.role = 'button';
     return anchor;
 }
 
-function prepareToDoItem() {
+function prepareToDoItem(id) {
     let newEntry = document.createElement('li');
-    newEntry.id = `toDoItem${app.numberOfToDoItems}`;
+    newEntry.id = `toDoItem${id}`;
     newEntry.className = 'toDoItem';
     return newEntry;
 }
 
-function prepareToDoItemSpan(toDoItemText) {
+function prepareToDoItemSpan(toDoItemText, idNumber) {
 
     let span = document.createElement('span');
     span.class = 'toDoItemText';
-    span.id = `toDoItemSpan${app.numberOfToDoItems}`;
+    span.id = `toDoItemSpan${idNumber}`;
     span.textContent = toDoItemText;
     span.contentEditable = true;
     span.spellcheck = false;
@@ -131,7 +131,7 @@ function deleteToDoItem(id) {
     console.log(`Elimin un item din localStorage ${toDoObject.toDoId} ${toDoObject.contentText}`);
     toBeDeleted.parentNode.removeChild(toBeDeleted);
     window.localStorage.removeItem(id);
-    console.log(app.numberOfToDoItems);
+    console.log(app.idOfLastEnteredToDoItem);
     console.log(localStorage);
 }
 
@@ -141,13 +141,13 @@ function editToDoItem(id) {
     if (toDoObject.contentText) {
         console.log(`Editez un item  din localStorage ${toDoObject.toDoId} ${toDoObject.contentText}`);
         window.localStorage.setItem(document.getElementById(id).parentNode.id, toDoObject.contentText);
-        console.log(app.numberOfToDoItems);
+        console.log(app.idOfLastEnteredToDoItem);
         return;
     }
     console.log(`Elimin un item din localStorage ${toDoObject.toDoId} ${toDoObject.contentText}`);
     window.localStorage.removeItem(document.getElementById(id).parentNode.id);
     deleteToDoItem(document.getElementById(id).parentNode.id);
-    console.log(app.numberOfToDoItems);
+    console.log(app.idOfLastEnteredToDoItem);
 }
 
 function getCurrentDate() {
@@ -156,7 +156,7 @@ function getCurrentDate() {
 }
 
 function onLoad() {
-    app.numberOfToDoItems = 0;
+    app.idOfLastEnteredToDoItem = 0;
     const myStorage = getMyStorage();
     myStorage.forEach(element => addToDoItem(element));
 }
@@ -184,11 +184,10 @@ function getMyStorage() {
 }
 
 function onUpdate() {
-    console.log(app.numberOfToDoItems);
+    console.log(app.idOfLastEnteredToDoItem);
     popElements();
     const myStorage = getMyStorage();
     myStorage.forEach(element => addUpdatedToDoItems(element.toDoId, element.contentText));
-    app.numberOfToDoItems = window.localStorage.getItem('numberOfItems');
 }
 
 function popElements() {
