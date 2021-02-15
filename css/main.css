@@ -26,9 +26,7 @@ body {
 }
 
 #noToDoItemInfo {
-    background-color: whitesmoke;
     margin: 0.75rem;
-    font-size: 5vmin;
     text-align: center;
     color: lightseagreen;
 }
@@ -36,15 +34,7 @@ body {
 #mainHeader {
     background-color: lightseagreen;
     color: whitesmoke;
-    font-size: 10vmin;
     text-align: center;
-    padding: 0.75rem;
-    border-bottom: 5px solid whitesmoke;
-}
-
-#toDoInput {
-    display: flex;
-    border-bottom: 10px solid grey;
 }
 
 #addTodoTextBox {
@@ -63,37 +53,28 @@ body {
     color: whitesmoke;
 }
 
-#toDoList div {
-    background-color: whitesmoke;
-    color: lightseagreen;
-    border: 0.25rem solid lightgray;
-    border-radius: 2.5rem;
-    margin: 0.75rem;
-    text-align: center;
-}
-
 #addTodoTextBox::placeholder {
     color: whitesmoke;
 }
 
-#toDoList span[id*="toDoItemSpan"]:focus {
-    background: grey;
-    color: white;
+#toDoList {
+    text-align: left;
 }
 
-#toDoList span[id*="toDoItemSpan"]::selection {
-    background: darkgrey;
-    color: white;
-}
+    #toDoList span[id*="toDoItemSpan"]:focus {
+        background: grey;
+        color: white;
+    }
 
-#toDoList a {
-    color: teal;
-    text-decoration: none;
-}
+    #toDoList span[id*="toDoItemSpan"]::selection {
+        background: darkgrey;
+        color: white;
+    }
 
 .alert {
     font-size: 3vmin;
     color: lightseagreen;
+    word-wrap: break-word;
 }
 
 .alertButton {

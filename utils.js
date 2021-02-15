@@ -20,14 +20,14 @@ function addToDoItem(toDoItemText) {
     //Creates the div element and its children elements
     let newEntry = prepareToDoItem(app.idOfLastEnteredToDoItem);
     let toDoItemSpan = prepareToDoItemSpan(toDoItemText, parseInt((newEntry.id).slice(8)));
-    let removalAnchor = prepareToDoItemRemovalAnchor(parseInt((newEntry.id).slice(8)));
+    let removalButton = prepareToDoItemRemovalButton(parseInt((newEntry.id).slice(8)));
 
     //Updates the idNumber of the last entered item
     window.localStorage.setItem('numberOfItems', parseInt((newEntry.id).slice(8)));
 
     //Appends children elements to parent div elements
     newEntry.appendChild(toDoItemSpan);
-    newEntry.appendChild(removalAnchor);
+    newEntry.appendChild(removalButton);
 
     //Commit changes after the element loses focus
     toDoItemSpan.addEventListener('blur', function (event) {
@@ -36,11 +36,10 @@ function addToDoItem(toDoItemText) {
         setTextIfNoToDoItems();
     });
 
-    //Delete div element after anchor is clicked
-    removalAnchor.addEventListener('click', function (event) {
+    //Delete div element after button is clicked
+    removalButton.addEventListener('click', function (event) {
         event.preventDefault();
         deleteToDoItem(newEntry.id);
-        enableAlert('eraseAlert');
         setTextIfNoToDoItems();
     });
 
@@ -81,32 +80,36 @@ function doTodoItemsExist() {
 //Creates the div element
 function prepareToDoItem(id) {
     let newEntry = document.createElement('div');
-    newEntry.classList = 'toDoItem';
+    newEntry.classList = 'alert alert-success row rounded';
     newEntry.id = `toDoItem${id}`;
     return newEntry;
 }
 
 //Creates the span child element of the div element
 function prepareToDoItemSpan(toDoItemText, idNumber) {
+    let divSpan = document.createElement('div');
+    divSpan.classList = 'col-sm-10';
     let span = document.createElement('span');
     span.class = 'toDoItemText';
     span.id = `toDoItemSpan${idNumber}`;
     span.textContent = toDoItemText;
     span.contentEditable = true;
     span.spellcheck = false;
-    return span;
+    divSpan.appendChild(span);
+    return divSpan;
 }
 
-//Creates the anchor child element of the div element
-function prepareToDoItemRemovalAnchor(idNumber) {
-    let anchor = document.createElement('a');
-    anchor.style.padding = "3px 3px 3px 5px";
-    anchor.className = 'removalToDoAnchor';
-    anchor.id = `removalToDoAnchor${idNumber}`;
-    anchor.textContent = 'X';
-    anchor.href = '#';
-    anchor.role = 'button';
-    return anchor;
+//Creates the button child element of the div element
+function prepareToDoItemRemovalButton(idNumber) {
+    let divButton = document.createElement('div');
+    divButton.classList = 'col-sm-2 g-1';
+    let button = document.createElement('button');
+    button.classList = 'alertButton rounded';
+    button.id = `addAlertButton${idNumber}`;
+    button.textContent = 'Close';
+    button.role = 'button';
+    divButton.appendChild(button);
+    return divButton;
 }
 
 //Deletes the item found with the given id
@@ -181,11 +184,11 @@ function addUpdatedToDoItems(toDoItemId, toDoItemText) {
     //Creates the div element and its children elements
     let newEntry = prepareToDoItem(idNumber);
     let toDoItemSpan = prepareToDoItemSpan(toDoItemText, idNumber);
-    let removalAnchor = prepareToDoItemRemovalAnchor(idNumber);
+    let removalButton = prepareToDoItemRemovalButton(idNumber);
 
     //Appends children elements to parent div elements
     newEntry.appendChild(toDoItemSpan);
-    newEntry.appendChild(removalAnchor);
+    newEntry.appendChild(removalButton);
 
     //Commit changes after the element loses focus
     toDoItemSpan.addEventListener('blur',
@@ -195,21 +198,15 @@ function addUpdatedToDoItems(toDoItemId, toDoItemText) {
             setTextIfNoToDoItems();
         });
 
-    //Delete div element after anchor is clicked
-    removalAnchor.addEventListener('click',
+    //Delete div element after button is clicked
+    removalButton.addEventListener('click',
         function (event) {
             event.preventDefault();
             deleteToDoItem(newEntry.id);
-            enableAlert('eraseAlert');
             setTextIfNoToDoItems();
         });
 
     //Appends div element to its parent div element and updates the page
     list.appendChild(newEntry);
     setToDoTextBoxText();
-}
-
-function enableAlert(alertId) {
-    const alert = document.getElementById(alertId);
-    alert.hidden = false;
 }

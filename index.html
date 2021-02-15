@@ -13,9 +13,9 @@
 <body>
     <main role="main">
         <div class="container-sm rounded" id="toDoContainer">
-            <header id="mainHeader">
-                <span>My ToDo App</span>
-            </header>
+            <h1 id="mainHeader" class="display-3 p-2 border-bottom">
+                My ToDo App
+            </h1>
 
             <div class="row gx-2 mt-2">
                 <div class="col-sm-9">
@@ -25,21 +25,12 @@
             </div>
 
             <div class="row rounded" id="noToDoItemInfo" hidden>
-                <div class="col-12">
-                    <span>There are no ToDo items</span>
-                </div>
+                <h2>
+                    <div class="alert alert-warning rounded">You are yet to add any ToDo items</div>
+                </h2>
             </div>
 
-            <div class="container" id="toDoList">
-            </div>
-
-            <div class="alert alert-success rounded" role="alert" id="addAlert" hidden>
-                ToDo item succesfully added!
-                <button type="button" class="alertButton rounded" id="addAlertButton">Close</button>
-            </div>
-            <div class="alert alert-danger rounded" role="alert" id="eraseAlert" hidden>
-                ToDo item succesfully erased!
-                <button type="button" class="alertButton rounded" id="eraseAlertButton">Close</button>
+            <div class="container rounded" id="toDoList">
             </div>
         </div>
     </main>
