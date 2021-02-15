@@ -1,28 +1,43 @@
 ﻿<!DOCTYPE html>
 
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html id="mainPageHtml" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="utf-8" />
     <title>My TODO App</title>
-    <link href="main.css" rel="stylesheet">
+    <link href="bootstrap/bootstrap.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="headerContainer">
-        <span>My ToDo App</span>
-    </div>
-    <div class="toDoContainer">
-        <form id="toDoForm">
-            <input class="toDoTextBox" id="addTodoTextBox" placeholder="Enter something you planned to do" type="text"> <button id="addTodoButton" type="button">Add item</button>
-        </form>
-        <div  id="noToDoItemInfo" hidden>
-            <span>There are no ToDo items</span>
+    <main role="main">
+        <div class="jumbotron jumbotron-detail-todo-app">
+            <div class="container">
+            </div>
         </div>
-        <ul id="toDoList" class="toDoItemsList">
-        </ul>
-    </div>
+        <div class="container-sm rounded" id="toDoContainer">
+            <header id="mainHeader">
+                <span>My ToDo App</span>
+            </header>
 
+            <div class="row gx-2 mt-2">
+                <div class="col-sm-9">
+                    <form id="inputForm"><input type="text" class="input-group-text form-control padding-0" id="addTodoTextBox" placeholder="Enter something you planned to do" type="text"></form>
+                </div>
+                <div class="col-sm-3"><button class="form-control padding-0" id="addTodoButton" type="button">Add item</button></div>
+            </div>
+
+            <div class="row rounded" id="noToDoItemInfo" hidden>
+                <div class="col-12">
+                    <span>There are no ToDo items</span>
+                </div>
+            </div>
+
+            <div class="container" id="toDoList">
+            </div>
+        </div>
+    </main>
     <script src="./utils.js"></script>
     <script src="./home.js"></script>
 </body>

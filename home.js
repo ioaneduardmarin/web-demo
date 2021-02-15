@@ -12,7 +12,7 @@ addButton.addEventListener('click', function () {
 });
 
 //Trigger addToDoItem to create a li element when the form was submitted on enter key press
-document.getElementById('toDoForm').addEventListener('submit', function (event) {
+document.getElementById('inputForm').addEventListener('submit', function (event) {
     event.preventDefault();
     addToDoItem(getToDoTextBoxText());
     setTextIfNoToDoItems();
