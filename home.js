@@ -8,6 +8,7 @@ setTextIfNoToDoItems();
 const addButton = document.getElementById('addTodoButton');
 addButton.addEventListener('click', function () {
     addToDoItem(getToDoTextBoxText());
+    enableAlert('addAlert');
     setTextIfNoToDoItems();
 });
 
@@ -15,7 +16,16 @@ addButton.addEventListener('click', function () {
 document.getElementById('inputForm').addEventListener('submit', function (event) {
     event.preventDefault();
     addToDoItem(getToDoTextBoxText());
+    enableAlert('addAlert');
     setTextIfNoToDoItems();
+});
+
+document.getElementById('addAlertButton').addEventListener('click', function () {
+    document.getElementById('addAlert').hidden = 1;
+});
+
+document.getElementById('eraseAlertButton').addEventListener('click', function () {
+    document.getElementById('eraseAlert').hidden = 1;
 });
 
 //Updates the page when the local storage is modified

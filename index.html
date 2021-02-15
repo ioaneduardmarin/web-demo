@@ -12,10 +12,6 @@
 </head>
 <body>
     <main role="main">
-        <div class="jumbotron jumbotron-detail-todo-app">
-            <div class="container">
-            </div>
-        </div>
         <div class="container-sm rounded" id="toDoContainer">
             <header id="mainHeader">
                 <span>My ToDo App</span>
@@ -23,9 +19,9 @@
 
             <div class="row gx-2 mt-2">
                 <div class="col-sm-9">
-                    <form id="inputForm"><input type="text" class="input-group-text form-control padding-0" id="addTodoTextBox" placeholder="Enter something you planned to do" type="text"></form>
+                    <form id="inputForm"><input type="text" autocomplete="off" class="input-group-text form-control" id="addTodoTextBox" placeholder="Enter something you planned to do" type="text"></form>
                 </div>
-                <div class="col-sm-3"><button class="form-control padding-0" id="addTodoButton" type="button">Add item</button></div>
+                <div class="col-sm-3"><button class="form-control" id="addTodoButton" type="button">Add item</button></div>
             </div>
 
             <div class="row rounded" id="noToDoItemInfo" hidden>
@@ -35,6 +31,15 @@
             </div>
 
             <div class="container" id="toDoList">
+            </div>
+
+            <div class="alert alert-success rounded" role="alert" id="addAlert" hidden>
+                ToDo item succesfully added!
+                <button type="button" class="alertButton rounded" id="addAlertButton">Close</button>
+            </div>
+            <div class="alert alert-danger rounded" role="alert" id="eraseAlert" hidden>
+                ToDo item succesfully erased!
+                <button type="button" class="alertButton rounded" id="eraseAlertButton">Close</button>
             </div>
         </div>
     </main>

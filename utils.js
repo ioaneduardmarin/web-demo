@@ -4,9 +4,9 @@ const app = {
     toDoItems: []
 };
 
-//Add new li elements
+//Add new div elements
 function addToDoItem(toDoItemText) {
-    //Determines the idNumber of the last entered item to determine what Ids will the li element and its children element will have
+    //Determines the idNumber of the last entered item to determine what Ids will the div element and its children element will have
     app.idOfLastEnteredToDoItem = window.localStorage.getItem('numberOfItems');
     app.idOfLastEnteredToDoItem++;
 
@@ -17,7 +17,7 @@ function addToDoItem(toDoItemText) {
 
     let list = document.getElementById('toDoList');
 
-    //Creates the li element and its children elements
+    //Creates the div element and its children elements
     let newEntry = prepareToDoItem(app.idOfLastEnteredToDoItem);
     let toDoItemSpan = prepareToDoItemSpan(toDoItemText, parseInt((newEntry.id).slice(8)));
     let removalAnchor = prepareToDoItemRemovalAnchor(parseInt((newEntry.id).slice(8)));
@@ -25,7 +25,7 @@ function addToDoItem(toDoItemText) {
     //Updates the idNumber of the last entered item
     window.localStorage.setItem('numberOfItems', parseInt((newEntry.id).slice(8)));
 
-    //Appends children elements to parent li elements
+    //Appends children elements to parent div elements
     newEntry.appendChild(toDoItemSpan);
     newEntry.appendChild(removalAnchor);
 
@@ -36,15 +36,16 @@ function addToDoItem(toDoItemText) {
         setTextIfNoToDoItems();
     });
 
-    //Delete li element after anchor is clicked
+    //Delete div element after anchor is clicked
     removalAnchor.addEventListener('click', function (event) {
         event.preventDefault();
         deleteToDoItem(newEntry.id);
+        enableAlert('eraseAlert');
         setTextIfNoToDoItems();
     });
 
 
-    //Appends li element to its parent ul element and updates the page
+    //Appends div element to its parent div element and updates the page
     list.appendChild(newEntry);
     setToDoTextBoxText();
 
@@ -68,7 +69,7 @@ function setTextIfNoToDoItems() {
     document.getElementById('noToDoItemInfo').hidden = doTodoItemsExist();
 }
 
-//Checkhs if the ul element has children elemens
+//Checks if the parent div element has children elemens
 function doTodoItemsExist() {
     let number = document.getElementById('toDoList').childElementCount;
     if (parseInt(number) > 0) {
@@ -77,15 +78,15 @@ function doTodoItemsExist() {
     return false;
 }
 
-//Creates the li element
+//Creates the div element
 function prepareToDoItem(id) {
-    let newEntry = document.createElement('li');
+    let newEntry = document.createElement('div');
+    newEntry.classList = 'toDoItem';
     newEntry.id = `toDoItem${id}`;
-    newEntry.className = 'toDoItem';
     return newEntry;
 }
 
-//Creates the span child element of the li element
+//Creates the span child element of the div element
 function prepareToDoItemSpan(toDoItemText, idNumber) {
     let span = document.createElement('span');
     span.class = 'toDoItemText';
@@ -96,7 +97,7 @@ function prepareToDoItemSpan(toDoItemText, idNumber) {
     return span;
 }
 
-//Creates the anchor child element of the li element
+//Creates the anchor child element of the div element
 function prepareToDoItemRemovalAnchor(idNumber) {
     let anchor = document.createElement('a');
     anchor.style.padding = "3px 3px 3px 5px";
@@ -132,21 +133,21 @@ function editToDoItem(id) {
     deleteToDoItem(document.getElementById(id).parentNode.id);
 }
 
-//Updates the list of li elements
+//Updates the list of div elements
 function onUpdate() {
     popElements();
     const myStorage = getMyStorage();
     myStorage.forEach(element => addUpdatedToDoItems(element.toDoId, element.contentText));
 }
 
-//Deletes al li elements
+//Deletes al div elements
 function popElements() {
     let toDoItems = document.querySelectorAll('#toDoList > .toDoItem');
     toDoItems.forEach(element => element.parentNode.removeChild(element));
 }
 
 
-//Gets the objects that contain important data of the existing li elements from local storage
+//Gets the objects that contain important data of the existing div elements from local storage
 function getMyStorage() {
 
 
@@ -159,7 +160,7 @@ function getMyStorage() {
         return a - b;
     });
 
-    //Fills the toDoObject array with the sorted local storage objects that contain important data of the existing li elements
+    //Fills the toDoObject array with the sorted local storage objects that contain important data of the existing div elements
     const toDoObjects = [];
     keyNumbers.forEach(k => {
         let toDoObject = {
@@ -171,18 +172,18 @@ function getMyStorage() {
     return toDoObjects;
 }
 
-//Creates li and its children elements and adds them to the ul element(used when the page is refreshed and when the local storage was modified)
+//Creates div and its children elements and adds them to the parent div element(used when the page is refreshed and when the local storage was modified)
 function addUpdatedToDoItems(toDoItemId, toDoItemText) {
     const idNumber = parseInt(toDoItemId.slice(8));
     app.idOfLastEnteredToDoItem = idNumber;
     let list = document.getElementById('toDoList');
 
-    //Creates the li element and its children elements
+    //Creates the div element and its children elements
     let newEntry = prepareToDoItem(idNumber);
     let toDoItemSpan = prepareToDoItemSpan(toDoItemText, idNumber);
     let removalAnchor = prepareToDoItemRemovalAnchor(idNumber);
 
-    //Appends children elements to parent li elements
+    //Appends children elements to parent div elements
     newEntry.appendChild(toDoItemSpan);
     newEntry.appendChild(removalAnchor);
 
@@ -194,15 +195,21 @@ function addUpdatedToDoItems(toDoItemId, toDoItemText) {
             setTextIfNoToDoItems();
         });
 
-    //Delete li element after anchor is clicked
+    //Delete div element after anchor is clicked
     removalAnchor.addEventListener('click',
         function (event) {
             event.preventDefault();
             deleteToDoItem(newEntry.id);
+            enableAlert('eraseAlert');
             setTextIfNoToDoItems();
         });
 
-    //Appends li element to its parent ul element and updates the page
+    //Appends div element to its parent div element and updates the page
     list.appendChild(newEntry);
     setToDoTextBoxText();
+}
+
+function enableAlert(alertId) {
+    const alert = document.getElementById(alertId);
+    alert.hidden = false;
 }
