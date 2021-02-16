@@ -8,7 +8,6 @@
     overflow-x: hidden;
     text-align: center;
     color: white;
-    font-size: 3vmin;
     background-color: lightseagreen;
     border: 10px solid lightgray;
 }
@@ -41,13 +40,11 @@ body {
     text-align: center;
     background-color: lightseagreen;
     color: whitesmoke;
-    font-size: 3vmin;
     font-weight: bold;
 }
 
 #addTodoButton {
     text-align: center;
-    font-size: 3vmin;
     font-weight: bold;
     background-color: lightseagreen;
     color: whitesmoke;
@@ -72,13 +69,46 @@ body {
     }
 
 .alert {
-    font-size: 3vmin;
     color: lightseagreen;
     word-wrap: break-word;
 }
 
 .alertButton {
-    font-size: 3vmin;
     color: lightseagreen;
     background-color: whitesmoke;
+}
+
+@media (max-width: 575px) {
+    body {
+        font-size: 1rem;
+    }
+}
+
+@media (min-width: 576px) {
+    body {
+        font-size: 1.2rem;
+    }
+
+    #addTodoTextBox {
+        font-size: 1.4rem;
+    }
+
+    #addTodoButton {
+        font-size: 1.4rem;
+    }
+}
+
+
+@media (min-width: 768px) {
+    body {
+        font-size: 1.5rem;
+    }
+
+    #addTodoTextBox {
+        font-size: 1.6rem;
+    }
+
+    #addTodoButton {
+        font-size: 1.6rem;
+    }
 }
