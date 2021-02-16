@@ -8,7 +8,7 @@
     overflow-x: hidden;
     text-align: center;
     color: white;
-    background-color: lightseagreen;
+    background-color: #8CCFC9;
     border: 10px solid lightgray;
 }
 
@@ -24,21 +24,15 @@ body {
     list-style-type: none;
 }
 
-#noToDoItemInfo {
-    margin: 0.75rem;
-    text-align: center;
-    color: lightseagreen;
-}
-
 #mainHeader {
-    background-color: lightseagreen;
+    background-color: #8CCFC9;
     color: whitesmoke;
     text-align: center;
 }
 
 #addTodoTextBox {
     text-align: center;
-    background-color: lightseagreen;
+    background-color: #8CCFC9;
     color: whitesmoke;
     font-weight: bold;
 }
@@ -46,7 +40,7 @@ body {
 #addTodoButton {
     text-align: center;
     font-weight: bold;
-    background-color: lightseagreen;
+    background-color: #8CCFC9;
     color: whitesmoke;
 }
 
@@ -59,23 +53,31 @@ body {
 }
 
     #toDoList span[id*="toDoItemSpan"]:focus {
-        background: grey;
-        color: white;
+        background: #68EDE2;
+        color: #088278;
+        border-bottom: 4px whitesmoke dotted;
     }
 
     #toDoList span[id*="toDoItemSpan"]::selection {
-        background: darkgrey;
-        color: white;
+        background: #8CCFC9;
+        color: #088278;
+        border-bottom: 4px whitesmoke dotted;
     }
 
 .alert {
-    color: lightseagreen;
+    color: white;
     word-wrap: break-word;
+    background-color: #088278;
 }
 
 .alertButton {
-    color: lightseagreen;
+    color: #8CCFC9;
     background-color: whitesmoke;
+}
+
+#noToDoItemInfo {
+    margin: 0.75rem;
+    text-align: center;
 }
 
 @media (max-width: 575px) {

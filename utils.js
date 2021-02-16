@@ -19,20 +19,20 @@ function addToDoItem(toDoItemText) {
 
     //Creates the div element and its children elements
     let newEntry = prepareToDoItem(app.idOfLastEnteredToDoItem);
-    let toDoItemSpan = prepareToDoItemSpan(toDoItemText, parseInt((newEntry.id).slice(8)));
+    let toDoItemDivSpan = prepareToDoItemSpan(toDoItemText, parseInt((newEntry.id).slice(8)));
     let removalButton = prepareToDoItemRemovalButton(parseInt((newEntry.id).slice(8)));
 
     //Updates the idNumber of the last entered item
     window.localStorage.setItem('numberOfItems', parseInt((newEntry.id).slice(8)));
 
     //Appends children elements to parent div elements
-    newEntry.appendChild(toDoItemSpan);
+    newEntry.appendChild(toDoItemDivSpan);
     newEntry.appendChild(removalButton);
 
     //Commit changes after the element loses focus
-    toDoItemSpan.addEventListener('blur', function (event) {
+    toDoItemDivSpan.firstChild.addEventListener('blur', function (event) {
         event.preventDefault();
-        editToDoItem(toDoItemSpan.id);
+        editToDoItem(toDoItemDivSpan.firstChild.id);
         setTextIfNoToDoItems();
     });
 
@@ -49,7 +49,7 @@ function addToDoItem(toDoItemText) {
     setToDoTextBoxText();
 
     //Appends important element data to local storage
-    let toDoObject = { toDoId: newEntry.id, contentText: toDoItemSpan.textContent };
+    let toDoObject = { toDoId: newEntry.id, contentText: toDoItemDivSpan.textContent };
     window.localStorage.setItem(toDoObject.toDoId, toDoObject.contentText);
 }
 
@@ -88,7 +88,7 @@ function prepareToDoItem(id) {
 //Creates the span child element of the div element
 function prepareToDoItemSpan(toDoItemText, idNumber) {
     let divSpan = document.createElement('div');
-    divSpan.classList = 'col-sm-10';
+    divSpan.classList = 'col-sm-11';
     let span = document.createElement('span');
     span.class = 'toDoItemText';
     span.id = `toDoItemSpan${idNumber}`;
@@ -102,11 +102,11 @@ function prepareToDoItemSpan(toDoItemText, idNumber) {
 //Creates the button child element of the div element
 function prepareToDoItemRemovalButton(idNumber) {
     let divButton = document.createElement('div');
-    divButton.classList = 'col-sm-2 g-1';
+    divButton.classList = 'col-sm-1 g-1';
     let button = document.createElement('button');
     button.classList = 'alertButton rounded';
     button.id = `addAlertButton${idNumber}`;
-    button.textContent = 'Close';
+    button.innerHTML = '<span aria-hidden="true">&times;</span>';
     button.role = 'button';
     divButton.appendChild(button);
     return divButton;
@@ -129,11 +129,11 @@ function editToDoItem(id) {
     let toBeEdited = document.getElementById(id);
     let toDoObject = { toDoId: id, contentText: toBeEdited.textContent };
     if (toDoObject.contentText) {
-        window.localStorage.setItem(document.getElementById(id).parentNode.id, toDoObject.contentText);
+        window.localStorage.setItem(document.getElementById(id).parentNode.parentNode.id, toDoObject.contentText);
         return;
     }
-    window.localStorage.removeItem(document.getElementById(id).parentNode.id);
-    deleteToDoItem(document.getElementById(id).parentNode.id);
+    window.localStorage.removeItem(document.getElementById(id).parentNode.parentNode.id);
+    deleteToDoItem(document.getElementById(id).parentNode.parentNode.id);
 }
 
 //Updates the list of div elements
@@ -183,18 +183,18 @@ function addUpdatedToDoItems(toDoItemId, toDoItemText) {
 
     //Creates the div element and its children elements
     let newEntry = prepareToDoItem(idNumber);
-    let toDoItemSpan = prepareToDoItemSpan(toDoItemText, idNumber);
+    let toDoItemDivSpan = prepareToDoItemSpan(toDoItemText, idNumber);
     let removalButton = prepareToDoItemRemovalButton(idNumber);
 
     //Appends children elements to parent div elements
-    newEntry.appendChild(toDoItemSpan);
+    newEntry.appendChild(toDoItemDivSpan);
     newEntry.appendChild(removalButton);
 
     //Commit changes after the element loses focus
-    toDoItemSpan.addEventListener('blur',
+    toDoItemDivSpan.firstChild.addEventListener('blur',
         function (event) {
             event.preventDefault();
-            editToDoItem(toDoItemSpan.id);
+            editToDoItem(toDoItemDivSpan.firstChild.id);
             setTextIfNoToDoItems();
         });
 
