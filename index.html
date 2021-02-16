@@ -5,11 +5,15 @@
 <head>
     <meta charset="utf-8" />
     <title>My TODO App</title>
+    <link href="toastr/toastr.css" rel="stylesheet" />
     <link href="bootstrap/bootstrap.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap" rel="stylesheet">
+
+
 </head>
+
 <body>
     <main role="main">
         <div class="container-sm rounded" id="toDoContainer">
@@ -29,12 +33,13 @@
                     <div class="alert rounded">You are yet to add any ToDo items</div>
                 </h2>
             </div>
-
             <div class="container rounded" id="toDoList">
             </div>
         </div>
     </main>
-    <script src="./utils.js"></script>
-    <script src="./home.js"></script>
+    <script type="text/javascript" src="./jquery/jquery.js"></script>
+    <script type="text/javascript" src="./toastr/toastr.js"></script>
+    <script type="text/javascript" src="./utils.js"></script>
+    <script type="text/javascript" src="./home.js"></script>
 </body>
 </html>
