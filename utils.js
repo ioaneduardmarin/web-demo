@@ -10,47 +10,50 @@ function addToDoItem(toDoItemText) {
     app.idOfLastEnteredToDoItem = window.localStorage.getItem('numberOfItems');
     app.idOfLastEnteredToDoItem++;
 
-    //Stops action if text is nullOrEmpty
-    if (!toDoItemText) {
-        return;
-    }
+    const newEntry = createToDoItem(app.idOfLastEnteredToDoItem, toDoItemText);
 
+    //Updates the idNumber of the last entered item
+    window.localStorage.setItem('numberOfItems', app.idOfLastEnteredToDoItem);
+
+    //Appends important element data to local storage
+    let toDoObject = { toDoId: newEntry.id, contentText: newEntry.firstChild.textContent };
+    window.localStorage.setItem(toDoObject.toDoId, toDoObject.contentText);
+}
+
+//Crreates new div element
+function createToDoItem(idNumber, toDoItemText) {
     let list = document.getElementById('toDoList');
 
     //Creates the div element and its children elements
-    let newEntry = prepareToDoItem(app.idOfLastEnteredToDoItem);
-    let toDoItemDivSpan = prepareToDoItemSpan(toDoItemText, parseInt((newEntry.id).slice(8)));
-    let removalButton = prepareToDoItemRemovalButton(parseInt((newEntry.id).slice(8)));
-
-    //Updates the idNumber of the last entered item
-    window.localStorage.setItem('numberOfItems', parseInt((newEntry.id).slice(8)));
+    let newEntry = prepareToDoItem(idNumber);
+    let toDoItemDivSpan = prepareToDoItemSpan(toDoItemText, idNumber);
+    let removalButton = prepareToDoItemRemovalButton(idNumber);
 
     //Appends children elements to parent div elements
     newEntry.appendChild(toDoItemDivSpan);
     newEntry.appendChild(removalButton);
 
     //Commit changes after the element loses focus
-    toDoItemDivSpan.firstChild.addEventListener('blur', function (event) {
-        event.preventDefault();
-        editToDoItem(toDoItemDivSpan.firstChild.id);
-        setTextIfNoToDoItems();
-    });
+    toDoItemDivSpan.firstChild.addEventListener('blur',
+        function (event) {
+            event.preventDefault();
+            editToDoItem(toDoItemDivSpan.firstChild.id);
+            setTextIfNoToDoItems();
+        });
 
     //Delete div element after button is clicked
-    removalButton.addEventListener('click', function (event) {
-        event.preventDefault();
-        deleteToDoItem(newEntry.id);
-        setTextIfNoToDoItems();
-    });
-
+    removalButton.addEventListener('click',
+        function (event) {
+            event.preventDefault();
+            deleteToDoItem(newEntry.id);
+            setTextIfNoToDoItems();
+        });
 
     //Appends div element to its parent div element and updates the page
     list.appendChild(newEntry);
     setToDoTextBoxText();
 
-    //Appends important element data to local storage
-    let toDoObject = { toDoId: newEntry.id, contentText: toDoItemDivSpan.textContent };
-    window.localStorage.setItem(toDoObject.toDoId, toDoObject.contentText);
+    return newEntry;
 }
 
 //Gets text from input element
@@ -80,7 +83,7 @@ function doTodoItemsExist() {
 //Creates the div element
 function prepareToDoItem(id) {
     let newEntry = document.createElement('div');
-    newEntry.classList = 'alert alert-success row rounded';
+    newEntry.classList = 'alert alert-success row rounded toDoItem';
     newEntry.id = `toDoItem${id}`;
     return newEntry;
 }
@@ -179,34 +182,25 @@ function getMyStorage() {
 function addUpdatedToDoItems(toDoItemId, toDoItemText) {
     const idNumber = parseInt(toDoItemId.slice(8));
     app.idOfLastEnteredToDoItem = idNumber;
-    let list = document.getElementById('toDoList');
+    createToDoItem(idNumber, toDoItemText);
+}
 
-    //Creates the div element and its children elements
-    let newEntry = prepareToDoItem(idNumber);
-    let toDoItemDivSpan = prepareToDoItemSpan(toDoItemText, idNumber);
-    let removalButton = prepareToDoItemRemovalButton(idNumber);
-
-    //Appends children elements to parent div elements
-    newEntry.appendChild(toDoItemDivSpan);
-    newEntry.appendChild(removalButton);
-
-    //Commit changes after the element loses focus
-    toDoItemDivSpan.firstChild.addEventListener('blur',
-        function (event) {
-            event.preventDefault();
-            editToDoItem(toDoItemDivSpan.firstChild.id);
-            setTextIfNoToDoItems();
-        });
-
-    //Delete div element after button is clicked
-    removalButton.addEventListener('click',
-        function (event) {
-            event.preventDefault();
-            deleteToDoItem(newEntry.id);
-            setTextIfNoToDoItems();
-        });
-
-    //Appends div element to its parent div element and updates the page
-    list.appendChild(newEntry);
-    setToDoTextBoxText();
+function setToastrOptions() {
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-bottom-center",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "1000",
+        "hideDuration": "1000",
+        "timeOut": "3000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
 }
