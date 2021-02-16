@@ -56,12 +56,14 @@ body {
         background: #68EDE2;
         color: #088278;
         border-bottom: 4px whitesmoke dotted;
+        outline: 0px solid transparent;
     }
 
     #toDoList span[id*="toDoItemSpan"]::selection {
         background: #8CCFC9;
         color: #088278;
         border-bottom: 4px whitesmoke dotted;
+        outline: 0 solid transparent;
     }
 
 .alert {
