@@ -73,46 +73,15 @@ body {
 }
 
 .alertButton {
-    color: #8CCFC9;
-    background-color: whitesmoke;
+    color: white;
 }
 
 #noToDoItemInfo {
     margin: 0.75rem;
-    text-align: center;
 }
 
 @media (max-width: 575px) {
     body {
         font-size: 1rem;
-    }
-}
-
-@media (min-width: 576px) {
-    body {
-        font-size: 1.2rem;
-    }
-
-    #addTodoTextBox {
-        font-size: 1.4rem;
-    }
-
-    #addTodoButton {
-        font-size: 1.4rem;
-    }
-}
-
-
-@media (min-width: 768px) {
-    body {
-        font-size: 1.5rem;
-    }
-
-    #addTodoTextBox {
-        font-size: 1.6rem;
-    }
-
-    #addTodoButton {
-        font-size: 1.6rem;
     }
 }

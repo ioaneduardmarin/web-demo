@@ -102,9 +102,9 @@ function prepareToDoItemSpan(toDoItemText, idNumber) {
 //Creates the button child element of the div element
 function prepareToDoItemRemovalButton(idNumber) {
     let divButton = document.createElement('div');
-    divButton.classList = 'col-sm-1 g-1';
+    divButton.classList = 'col-sm-1';
     let button = document.createElement('button');
-    button.classList = 'alertButton rounded';
+    button.classList = 'alertButton close rounded';
     button.id = `addAlertButton${idNumber}`;
     button.innerHTML = '<span aria-hidden="true">&times;</span>';
     button.role = 'button';
