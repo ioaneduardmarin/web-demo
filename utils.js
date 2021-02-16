@@ -4,6 +4,26 @@ const app = {
     toDoItems: []
 };
 
+function setToastrOptions() {
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-bottom-center",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "1000",
+        "hideDuration": "1000",
+        "timeOut": "3000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
+}
+
 //Add new div elements
 function addToDoItem(toDoItemText) {
     //Determines the idNumber of the last entered item to determine what Ids will the div element and its children element will have
@@ -122,9 +142,9 @@ function deleteToDoItem(id) {
         return;
     }
 
-    let toDoObject = { toDoId: id, contentText: toBeDeleted.firstChild.textContent };
     toBeDeleted.parentNode.removeChild(toBeDeleted);
     window.localStorage.removeItem(id);
+    toastr["success"]("Item succesfully deleted!", "Success!");
 }
 
 //Edits the span item found with the given id or deletes its parent if span element is empty after edit
@@ -135,7 +155,6 @@ function editToDoItem(id) {
         window.localStorage.setItem(document.getElementById(id).parentNode.parentNode.id, toDoObject.contentText);
         return;
     }
-    window.localStorage.removeItem(document.getElementById(id).parentNode.parentNode.id);
     deleteToDoItem(document.getElementById(id).parentNode.parentNode.id);
 }
 
@@ -183,24 +202,4 @@ function addUpdatedToDoItems(toDoItemId, toDoItemText) {
     const idNumber = parseInt(toDoItemId.slice(8));
     app.idOfLastEnteredToDoItem = idNumber;
     createToDoItem(idNumber, toDoItemText);
-}
-
-function setToastrOptions() {
-    toastr.options = {
-        "closeButton": true,
-        "debug": false,
-        "newestOnTop": false,
-        "progressBar": true,
-        "positionClass": "toast-bottom-center",
-        "preventDuplicates": false,
-        "onclick": null,
-        "showDuration": "1000",
-        "hideDuration": "1000",
-        "timeOut": "3000",
-        "extendedTimeOut": "1000",
-        "showEasing": "swing",
-        "hideEasing": "linear",
-        "showMethod": "fadeIn",
-        "hideMethod": "fadeOut"
-    };
 }

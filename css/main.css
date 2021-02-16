@@ -86,7 +86,7 @@ body {
     }
 }
 
-.toast {
+.toast-success {
     color: white;
     background-color: green;
 }
