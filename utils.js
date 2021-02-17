@@ -24,12 +24,13 @@ function setToastrOptions() {
     };
 }
 
-//Add new div elements
-function addToDoItem(toDoItemText) {
+//Add new ToDoItem div element
+function addToDoItemDivToParentElement(toDoItemText) {
     //Determines the idNumber of the last entered item to determine what Ids will the div element and its children element will have
     app.idOfLastEnteredToDoItem = window.localStorage.getItem('numberOfItems');
     app.idOfLastEnteredToDoItem++;
 
+    //Creates new div element
     const newEntry = createToDoItem(app.idOfLastEnteredToDoItem, toDoItemText);
 
     //Updates the idNumber of the last entered item
@@ -40,7 +41,7 @@ function addToDoItem(toDoItemText) {
     window.localStorage.setItem(toDoObject.toDoId, toDoObject.contentText);
 }
 
-//Crreates new div element
+//Creates new div element
 function createToDoItem(idNumber, toDoItemText) {
     let list = document.getElementById('toDoList');
 
@@ -150,9 +151,8 @@ function deleteToDoItem(id) {
 //Edits the span item found with the given id or deletes its parent if span element is empty after edit
 function editToDoItem(id) {
     let toBeEdited = document.getElementById(id);
-    let toDoObject = { toDoId: id, contentText: toBeEdited.textContent };
-    if (toDoObject.contentText) {
-        window.localStorage.setItem(document.getElementById(id).parentNode.parentNode.id, toDoObject.contentText);
+    if (toBeEdited.textContent) {
+        window.localStorage.setItem(document.getElementById(id).parentNode.parentNode.id, toBeEdited.textContent);
         return;
     }
     deleteToDoItem(document.getElementById(id).parentNode.parentNode.id);
@@ -171,11 +171,8 @@ function popElements() {
     toDoItems.forEach(element => element.parentNode.removeChild(element));
 }
 
-
 //Gets the objects that contain important data of the existing div elements from local storage
 function getMyStorage() {
-
-
     //Extracts keys of the local storage objects and orders them 
     let keys = Object.keys(localStorage);
     keys = keys.filter(key => key.includes('toDoItem'));
@@ -202,4 +199,15 @@ function addUpdatedToDoItems(toDoItemId, toDoItemText) {
     const idNumber = parseInt(toDoItemId.slice(8));
     app.idOfLastEnteredToDoItem = idNumber;
     createToDoItem(idNumber, toDoItemText);
+}
+
+//Represents the whole process undertaken to add an item and adapt the page according to its addition
+function addNewToDoItem() {
+    if (!getToDoTextBoxText()) {
+        return;
+    }
+
+    addToDoItemDivToParentElement(getToDoTextBoxText());
+    setTextIfNoToDoItems();
+    toastr["success"]("Item succesfully added!", "Success!");
 }

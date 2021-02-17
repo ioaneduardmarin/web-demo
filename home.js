@@ -6,24 +6,12 @@ onUpdate();
 setTextIfNoToDoItems();
 
 $('#addTodoButton').click(function () {
-    if (!getToDoTextBoxText()) {
-        return;
-    }
-
-    addToDoItem(getToDoTextBoxText());
-    setTextIfNoToDoItems();
-    toastr["success"]("Item succesfully added!", "Success!");
+    addNewToDoItem();
 });
 
 $('#inputForm').submit(function (event) {
     event.preventDefault();
-    if (!getToDoTextBoxText()) {
-        return;
-    }
-
-    addToDoItem(getToDoTextBoxText());
-    setTextIfNoToDoItems();
-    toastr["success"]("Item succesfully added!", "Success!");
+    addNewToDoItem();
 });
 
 //Updates the page when the local storage is modified
