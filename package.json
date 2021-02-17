@@ -11,8 +11,5 @@
   "devDependencies": {
     "lite-server": "^2.5.4"
   },
-  "dependencies": {
-    "jquery": "^3.5.1",
-    "toastr": "^2.1.4"
-  }
+  "dependencies": {}
 }
