@@ -66,11 +66,27 @@ body {
         outline: 0 solid transparent;
     }
 
-.alert {
+#noToDoItemInfo {
     color: white;
     word-wrap: break-word;
     background-color: #088278;
 }
+
+.alert-success {
+    color: white;
+    word-wrap: break-word;
+    background-color: #088278;
+}
+
+.alert-secondary {
+    color: white;
+    word-wrap: break-word;
+    background-color: #8C8C8C;
+}
+
+    .alert-secondary .toDoItemText {
+        text-decoration: line-through;
+    }
 
 .alertButton {
     color: white;
@@ -89,4 +105,8 @@ body {
 .toast-success {
     color: white;
     background-color: green;
+}
+
+.checkBox {
+    z-index: +1;
 }
