@@ -31,9 +31,11 @@ function createToDoItem(idNumber, toDoItemText, checkBoxValue) {
         if (this.checked) {
             toDoItemDivCheckBox.parentNode.classList = 'alert alert-secondary row rounded toDoItem';
             editToDoItem(toDoItemDivCheckBox.firstChild.id);
+            onUpdate();
         } else {
             toDoItemDivCheckBox.parentNode.classList = 'alert alert-success row rounded toDoItem';
             editToDoItem(toDoItemDivCheckBox.firstChild.id);
+            onUpdate();
         }
     });
 

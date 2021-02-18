@@ -2,15 +2,13 @@
 function onUpdate() {
     popElements();
     const myStorage = getMyStorage();
-    myStorage.forEach(element => addUpdatedToDoItems(element.toDoId, element.contentText, element.toDoCheckBoxValue));
+    myStorage.forEach(element => addUpdatedToDoItems(element.toDoId, element.contentText, element.toDoCheckBoxValue, parseInt(myStorage[0].checkingOrderNumber)));
 }
 
 //Deletes al div elements
 function popElements() {
     let toDoItems = document.querySelectorAll('#toDoList > .toDoItem');
-    console.log(document.getElementById('toDoList').children);
     toDoItems.forEach(element => element.parentNode.removeChild(element));
-    console.log(document.getElementById('toDoList').children);
 }
 
 //Gets the objects that contain important data of the existing div elements from local storage
@@ -26,16 +24,25 @@ function getMyStorage() {
 
     //Fills the toDoObject array with the sorted local storage objects that contain important data of the existing div elements
     const toDoObjects = [];
+    let priorityToDoObjects = [];
     keyNumbers.forEach(k => {
         let toDoObject = JSON.parse(localStorage.getItem(`toDoItem${k}`));
-        toDoObjects.push(toDoObject);
+        if (toDoObject.checkingOrderNumber !== null) {
+            priorityToDoObjects.push(toDoObject);
+        }
+        else {
+            toDoObjects.push(toDoObject);
+        }
+        priorityToDoObjects =
+            priorityToDoObjects.sort((a, b) => parseInt(b.checkingOrderNumber) - parseInt(a.checkingOrderNumber));
     });
-    return toDoObjects;
+    return priorityToDoObjects.concat(toDoObjects);
 }
 
 //Creates div and its children elements and adds them to the parent div element(used when the page is refreshed and when the local storage was modified)
 function addUpdatedToDoItems(toDoItemId, toDoItemText, checkBoxValue) {
     const idNumber = parseInt(toDoItemId.slice(8));
     app.idOfLastEnteredToDoItem = idNumber;
+    app.orderNumberOfLastCheckedItem = parseInt(JSON.parse(localStorage.getItem('numberOfPrioritizedItems')));
     createToDoItem(idNumber, toDoItemText, checkBoxValue);
 }
