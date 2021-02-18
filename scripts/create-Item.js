@@ -56,7 +56,7 @@ function createToDoItem(idNumber, toDoItemText, checkBoxValue) {
         });
 
     //Appends div element to its parent div element and updates the page
-    list.appendChild(newEntry);
+    list.prepend(newEntry);
     setToDoTextBoxText();
 
     return newEntry;

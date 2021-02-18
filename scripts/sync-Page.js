@@ -34,7 +34,7 @@ function getMyStorage() {
             toDoObjects.push(toDoObject);
         }
         priorityToDoObjects =
-            priorityToDoObjects.sort((a, b) => parseInt(b.checkingOrderNumber) - parseInt(a.checkingOrderNumber));
+            priorityToDoObjects.sort((a, b) => parseInt(a.checkingOrderNumber) - parseInt(b.checkingOrderNumber));
     });
     return priorityToDoObjects.concat(toDoObjects);
 }
