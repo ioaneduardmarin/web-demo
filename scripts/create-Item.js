@@ -29,11 +29,11 @@ function createToDoItem(idNumber, toDoItemText, checkBoxValue) {
     //Changes the parent elements' classlist according to the state of the checkbox
     toDoItemDivCheckBox.firstChild.addEventListener('change', function () {
         if (this.checked) {
-            toDoItemDivCheckBox.parentNode.classList = 'alert alert-secondary row rounded toDoItem';
+            toDoItemDivCheckBox.parentNode.classList = 'alert alert-secondary row rounded toDoItem xyz-in';
             editToDoItem(toDoItemDivCheckBox.firstChild.id);
             onUpdate();
         } else {
-            toDoItemDivCheckBox.parentNode.classList = 'alert alert-success row rounded toDoItem';
+            toDoItemDivCheckBox.parentNode.classList = 'alert alert-success row rounded toDoItem xyz-in';
             editToDoItem(toDoItemDivCheckBox.firstChild.id);
             onUpdate();
         }
@@ -65,7 +65,7 @@ function createToDoItem(idNumber, toDoItemText, checkBoxValue) {
 //Creates the div element
 function prepareToDoItem(id, alertClass) {
     const newEntry = document.createElement('div');
-    newEntry.classList = `alert ${alertClass} row rounded toDoItem`;
+    newEntry.classList = `alert ${alertClass} row rounded toDoItem xyz-in`;
     newEntry.id = `toDoItem${id}`;
     return newEntry;
 }
