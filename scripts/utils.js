@@ -22,34 +22,35 @@ function addToDoItemDivToParentElement(toDoItemText) {
     app.idOfLastEnteredToDoItem++;
 
     //Creates new div element
-    const newEntry = createToDoItem(app.idOfLastEnteredToDoItem, toDoItemText);
+    const newEntry = createToDoItem(app.idOfLastEnteredToDoItem, toDoItemText, 'unchecked');
 
     //Updates the idNumber of the last entered item
     window.localStorage.setItem('numberOfItems', app.idOfLastEnteredToDoItem);
 
     //Appends important element data to local storage
-    let toDoObject = { toDoId: newEntry.id, contentText: newEntry.firstChild.textContent };
-    window.localStorage.setItem(toDoObject.toDoId, toDoObject.contentText);
+    let toDoObject = { toDoId: newEntry.id, contentText: newEntry.children[1].textContent, toDoCheckBoxValue: 'unchecked' };
+    console.log(toDoObject);
+    window.localStorage.setItem(toDoObject.toDoId, JSON.stringify(toDoObject));
 }
 
 //Gets text from input element
 function getToDoTextBoxText() {
-    return document.getElementById('addTodoTextBox').value;
+    return document.querySelector('#addTodoTextBox').value;
 }
 
 //Resets input text content state to empty
 function setToDoTextBoxText() {
-    document.getElementById('addTodoTextBox').value = '';
+    document.querySelector('#addTodoTextBox').value = '';
 }
 
 //Sets the visibility state of the element with id equal to 'noToDoItemInfo'
 function setTextIfNoToDoItems() {
-    document.getElementById('noToDoItemInfo').hidden = doTodoItemsExist();
+    document.querySelector('#noToDoItemInfo').hidden = doTodoItemsExist();
 }
 
 //Checks if the parent div element has children elemens
 function doTodoItemsExist() {
-    let number = document.getElementById('toDoList').childElementCount;
+    let number = document.querySelector('#toDoList').childElementCount;
     if (parseInt(number) > 0) {
         return true;
     }
@@ -63,7 +64,7 @@ function deleteToDoItem(id) {
         return;
     }
 
-    toBeDeleted.parentNode.removeChild(toBeDeleted);
+    document.querySelector('#toDoList').removeChild(toBeDeleted);
     window.localStorage.removeItem(id);
     toastr["success"]("Item succesfully deleted!", "Success!");
 }
@@ -71,9 +72,39 @@ function deleteToDoItem(id) {
 //Edits the span item found with the given id or deletes its parent if span element is empty after edit
 function editToDoItem(id) {
     let toBeEdited = document.getElementById(id);
-    if (toBeEdited.textContent) {
-        window.localStorage.setItem(document.getElementById(id).parentNode.parentNode.id, toBeEdited.textContent);
+    const localStorageObject = JSON.parse(localStorage.getItem(`toDoItem${id.substr(12)}`));
+    let toDoObject = {};
+
+    if (toBeEdited.tagName == 'SPAN') {
+        if (toBeEdited.textContent) {
+            toDoObject = {
+                toDoId: `toDoItem${id.substr(12)}`,
+                contentText: toBeEdited.textContent,
+                toDoCheckBoxValue: localStorageObject.toDoCheckBoxValue
+            };
+            window.localStorage.setItem(toDoObject.toDoId, JSON.stringify(toDoObject));
+            return;
+        }
+        deleteToDoItem(toDoObject.toDoId);
         return;
     }
-    deleteToDoItem(document.getElementById(id).parentNode.parentNode.id);
+
+    if (toBeEdited.checked) {
+        toDoObject = {
+            toDoId: `toDoItem${id.substr(12)}`,
+            contentText: localStorageObject.contentText,
+            toDoCheckBoxValue: 'checked'
+        };
+        console.log(toDoObject);
+        window.localStorage.setItem(toDoObject.toDoId, JSON.stringify(toDoObject));
+        return;
+    }
+
+    toDoObject = {
+        toDoId: `toDoItem${id.substr(12)}`,
+        contentText: localStorageObject.contentText,
+        toDoCheckBoxValue: 'unchecked'
+    };
+    console.log(toDoObject);
+    window.localStorage.setItem(toDoObject.toDoId, JSON.stringify(toDoObject));
 }
