@@ -1,7 +1,7 @@
 // JavaScript source code
 const app = {
     idOfLastEnteredToDoItem: 0,
-    toDoItems: []
+    orderNumberOfLastCheckedItem: 0
 };
 
 //Represents the whole process undertaken to add an item and adapt the page according to its addition
@@ -28,8 +28,7 @@ function addToDoItemDivToParentElement(toDoItemText) {
     window.localStorage.setItem('numberOfItems', app.idOfLastEnteredToDoItem);
 
     //Appends important element data to local storage
-    let toDoObject = { toDoId: newEntry.id, contentText: newEntry.children[1].textContent, toDoCheckBoxValue: 'unchecked' };
-    console.log(toDoObject);
+    let toDoObject = { toDoId: newEntry.id, contentText: newEntry.children[1].textContent, toDoCheckBoxValue: 'unchecked', checkingOrderNumber: null };
     window.localStorage.setItem(toDoObject.toDoId, JSON.stringify(toDoObject));
 }
 
@@ -80,7 +79,8 @@ function editToDoItem(id) {
             toDoObject = {
                 toDoId: `toDoItem${id.substr(12)}`,
                 contentText: toBeEdited.textContent,
-                toDoCheckBoxValue: localStorageObject.toDoCheckBoxValue
+                toDoCheckBoxValue: localStorageObject.toDoCheckBoxValue,
+                checkingOrderNumber: localStorageObject.checkingOrderNumber
             };
             window.localStorage.setItem(toDoObject.toDoId, JSON.stringify(toDoObject));
             return;
@@ -90,12 +90,14 @@ function editToDoItem(id) {
     }
 
     if (toBeEdited.checked) {
+        app.orderNumberOfLastCheckedItem++;
         toDoObject = {
             toDoId: `toDoItem${id.substr(12)}`,
             contentText: localStorageObject.contentText,
-            toDoCheckBoxValue: 'checked'
+            toDoCheckBoxValue: 'checked',
+            checkingOrderNumber: app.orderNumberOfLastCheckedItem
         };
-        console.log(toDoObject);
+        window.localStorage.setItem('numberOfPrioritizedItems', app.orderNumberOfLastCheckedItem);
         window.localStorage.setItem(toDoObject.toDoId, JSON.stringify(toDoObject));
         return;
     }
@@ -103,8 +105,8 @@ function editToDoItem(id) {
     toDoObject = {
         toDoId: `toDoItem${id.substr(12)}`,
         contentText: localStorageObject.contentText,
-        toDoCheckBoxValue: 'unchecked'
+        toDoCheckBoxValue: 'unchecked',
+        checkingOrderNumber: null
     };
-    console.log(toDoObject);
     window.localStorage.setItem(toDoObject.toDoId, JSON.stringify(toDoObject));
 }

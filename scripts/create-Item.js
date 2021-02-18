@@ -31,9 +31,11 @@ function createToDoItem(idNumber, toDoItemText, checkBoxValue) {
         if (this.checked) {
             toDoItemDivCheckBox.parentNode.classList = 'alert alert-secondary row rounded toDoItem';
             editToDoItem(toDoItemDivCheckBox.firstChild.id);
+            onUpdate();
         } else {
             toDoItemDivCheckBox.parentNode.classList = 'alert alert-success row rounded toDoItem';
             editToDoItem(toDoItemDivCheckBox.firstChild.id);
+            onUpdate();
         }
     });
 
@@ -54,7 +56,7 @@ function createToDoItem(idNumber, toDoItemText, checkBoxValue) {
         });
 
     //Appends div element to its parent div element and updates the page
-    list.appendChild(newEntry);
+    list.prepend(newEntry);
     setToDoTextBoxText();
 
     return newEntry;
