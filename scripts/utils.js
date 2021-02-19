@@ -22,7 +22,7 @@ function addToDoItemDivToParentElement(toDoItemText) {
     app.idOfLastEnteredToDoItem++;
 
     //Creates new div element
-    const newEntry = createToDoItem(app.idOfLastEnteredToDoItem, toDoItemText, 'unchecked');
+    const newEntry = createToDoItem(app.idOfLastEnteredToDoItem, toDoItemText, 'unchecked', "xyz-in");
 
     //Updates the idNumber of the last entered item
     window.localStorage.setItem('numberOfItems', app.idOfLastEnteredToDoItem);
@@ -63,9 +63,14 @@ function deleteToDoItem(id) {
         return;
     }
 
-    document.querySelector('#toDoList').removeChild(toBeDeleted);
-    window.localStorage.removeItem(id);
-    toastr["success"]("Item succesfully deleted!", "Success!");
+    window.localStorage.setItem('idOfLastModifiedItem', id);
+    onUpdate('xyz-out');
+    setTimeout(function () {
+        document.querySelector('#toDoList').removeChild(document.getElementById(`${id}`));
+        window.localStorage.removeItem(id);
+        toastr["success"]("Item succesfully deleted!", "Success!");
+        setTextIfNoToDoItems();
+    }, 300);
 }
 
 //Edits the span item found with the given id or deletes its parent if span element is empty after edit
@@ -97,8 +102,14 @@ function editToDoItem(id) {
             toDoCheckBoxValue: 'checked',
             checkingOrderNumber: app.orderNumberOfLastCheckedItem
         };
-        window.localStorage.setItem('numberOfPrioritizedItems', app.orderNumberOfLastCheckedItem);
-        window.localStorage.setItem(toDoObject.toDoId, JSON.stringify(toDoObject));
+        window.localStorage.setItem('idOfLastModifiedItem', toDoObject.toDoId);
+        onUpdate('xyz-out');
+        setTimeout(function () {
+            window.localStorage.setItem('numberOfPrioritizedItems', app.orderNumberOfLastCheckedItem);
+            window.localStorage.setItem(toDoObject.toDoId, JSON.stringify(toDoObject));
+            onUpdate('xyz-in');
+        },
+            200);
         return;
     }
 
@@ -108,5 +119,11 @@ function editToDoItem(id) {
         toDoCheckBoxValue: 'unchecked',
         checkingOrderNumber: null
     };
-    window.localStorage.setItem(toDoObject.toDoId, JSON.stringify(toDoObject));
+    window.localStorage.setItem('idOfLastModifiedItem', toDoObject.toDoId);
+    onUpdate('xyz-out');
+    setTimeout(function () {
+        window.localStorage.setItem(toDoObject.toDoId, JSON.stringify(toDoObject));
+        onUpdate('xyz-in');
+    },
+        200);
 }

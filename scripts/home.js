@@ -2,7 +2,7 @@
 
 //Update page first load
 setToastrOptions();
-onUpdate();
+onUpdate('');
 setTextIfNoToDoItems();
 
 $('#addTodoButton').click(function () {
@@ -16,8 +16,7 @@ $('#inputForm').submit(function (event) {
 
 //Updates the page when the local storage is modified
 window.addEventListener('storage', (e) => {
-    console.log('Declansez operatia de sincronizare a itemilor toDo intre tabele');
-    onUpdate();
+    onUpdate('');
     setTextIfNoToDoItems();
 });
 

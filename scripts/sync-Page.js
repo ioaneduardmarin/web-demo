@@ -1,8 +1,8 @@
 //Updates the list of div elements
-function onUpdate() {
+function onUpdate(animationClass) {
     popElements();
     const myStorage = getMyStorage();
-    myStorage.forEach(element => addUpdatedToDoItems(element.toDoId, element.contentText, element.toDoCheckBoxValue, parseInt(myStorage[0].checkingOrderNumber)));
+    myStorage.forEach(element => addUpdatedToDoItems(element.toDoId, element.contentText, element.toDoCheckBoxValue, element.toDoId === localStorage.getItem('idOfLastModifiedItem') ? `${animationClass}` : ''));
 }
 
 //Deletes al div elements
@@ -40,9 +40,8 @@ function getMyStorage() {
 }
 
 //Creates div and its children elements and adds them to the parent div element(used when the page is refreshed and when the local storage was modified)
-function addUpdatedToDoItems(toDoItemId, toDoItemText, checkBoxValue) {
+function addUpdatedToDoItems(toDoItemId, toDoItemText, checkBoxValue, animationValue) {
     const idNumber = parseInt(toDoItemId.slice(8));
     app.idOfLastEnteredToDoItem = idNumber;
-    app.orderNumberOfLastCheckedItem = parseInt(JSON.parse(localStorage.getItem('numberOfPrioritizedItems')));
-    createToDoItem(idNumber, toDoItemText, checkBoxValue);
+    createToDoItem(idNumber, toDoItemText, checkBoxValue, animationValue);
 }
