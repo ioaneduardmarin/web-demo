@@ -2,7 +2,8 @@
 
 //Update page first load
 setToastrOptions();
-onUpdate('');
+getSyncData();
+onUpdate(app.toDoItems,'');
 setTextIfNoToDoItems();
 
 $('#addTodoButton').click(function () {
@@ -16,7 +17,7 @@ $('#inputForm').submit(function (event) {
 
 //Updates the page when the local storage is modified
 window.addEventListener('storage', (e) => {
-    onUpdate('');
+    onUpdate(app.toDoItems, '');
     setTextIfNoToDoItems();
 });
 
