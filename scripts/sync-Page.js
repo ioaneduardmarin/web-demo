@@ -43,5 +43,6 @@ function getMyStorage() {
 function addUpdatedToDoItems(toDoItemId, toDoItemText, checkBoxValue, animationValue) {
     const idNumber = parseInt(toDoItemId.slice(8));
     app.idOfLastEnteredToDoItem = idNumber;
+    app.orderNumberOfLastCheckedItem = parseInt(localStorage.getItem('numberOfPrioritizedItems'));
     createToDoItem(idNumber, toDoItemText, checkBoxValue, animationValue);
 }

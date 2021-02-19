@@ -103,9 +103,9 @@ function editToDoItem(id) {
             checkingOrderNumber: app.orderNumberOfLastCheckedItem
         };
         window.localStorage.setItem('idOfLastModifiedItem', toDoObject.toDoId);
+        window.localStorage.setItem('numberOfPrioritizedItems', app.orderNumberOfLastCheckedItem);
         onUpdate('xyz-out');
         setTimeout(function () {
-            window.localStorage.setItem('numberOfPrioritizedItems', app.orderNumberOfLastCheckedItem);
             window.localStorage.setItem(toDoObject.toDoId, JSON.stringify(toDoObject));
             onUpdate('xyz-in');
         },

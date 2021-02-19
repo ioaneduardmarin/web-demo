@@ -30,10 +30,8 @@ function createToDoItem(idNumber, toDoItemText, checkBoxValue, animationValue) {
     toDoItemDivCheckBox.firstChild.addEventListener('change', function () {
         if (this.checked) {
             editToDoItem(toDoItemDivCheckBox.firstChild.id);
-            onUpdate('xyz-in');
         } else {
             editToDoItem(toDoItemDivCheckBox.firstChild.id);
-            onUpdate('xyz-in');
         }
     });
 
