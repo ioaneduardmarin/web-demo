@@ -1,8 +1,8 @@
 // JavaScript source code
 const app = {
-    toDoItems: [],
     idOfLastEnteredToDoItem: 0,
     orderNumberOfLastCheckedItem: 0,
+    toDoItems: [],
     idOfLastModifiedItem: ''
 };
 
@@ -32,6 +32,7 @@ function addToDoItemDivToParentElement(toDoItemText) {
     //Appends important element data to local storage
     let toDoObject = { toDoId: newEntry.id, contentText: newEntry.children[1].textContent, toDoCheckBoxValue: 'unchecked', checkingOrderNumber: null };
     window.localStorage.setItem(toDoObject.toDoId, JSON.stringify(toDoObject));
+    app.toDoItems.push(toDoObject);
     app.toDoItems = getMyStorage();
 }
 
@@ -66,12 +67,13 @@ function deleteToDoItem(id) {
         return;
     }
 
+    app.idOfLastModifiedItem = id;
     window.localStorage.setItem('idOfLastModifiedItem', id);
-    onUpdate(app.toDoItems, 'xyz-out');
+    onUpdate('', 'xyz-out');
     setTimeout(function () {
         document.querySelector('#toDoList').removeChild(document.getElementById(`${id}`));
         window.localStorage.removeItem(id);
-        app.toDoItems = getMyStorage();
+        app.toDoItems = app.toDoItems.filter(object => object.toDoId !== id);
         toastr["success"]("Item succesfully deleted!", "Success!");
         setTextIfNoToDoItems();
     }, 300);
@@ -80,7 +82,8 @@ function deleteToDoItem(id) {
 //Edits the span item found with the given id or deletes its parent if span element is empty after edit
 function editToDoItem(id) {
     let toBeEdited = document.getElementById(id);
-    const localStorageObject = app.toDoItems.filter(item => { return item.toDoId === `toDoItem${id.substr(12)}` })[0];
+    const localStorageObject = app.toDoItems.filter(object => object.toDoId === `toDoItem${id.substr(12)}`)[0];
+    const localStorageObjectIndex = app.toDoItems.findIndex(object => object.toDoId === localStorageObject.toDoId);
     let toDoObject = {};
 
     if (toBeEdited.tagName == 'SPAN') {
@@ -91,11 +94,13 @@ function editToDoItem(id) {
                 toDoCheckBoxValue: localStorageObject.toDoCheckBoxValue,
                 checkingOrderNumber: localStorageObject.checkingOrderNumber
             };
-            console.log(toDoObject);
+
             window.localStorage.setItem(toDoObject.toDoId, JSON.stringify(toDoObject));
+            app.toDoItems[localStorageObjectIndex] = toDoObject;
             return;
         }
         deleteToDoItem(toDoObject.toDoId);
+        app.toDoItems = app.toDoItems.filter(object => object.toDoId !== toDoObject.toDoId);
         return;
     }
 
@@ -107,14 +112,14 @@ function editToDoItem(id) {
             toDoCheckBoxValue: 'checked',
             checkingOrderNumber: app.orderNumberOfLastCheckedItem
         };
-        app.idOfLastModifiedItem = toDoObject.toDoId;
         window.localStorage.setItem('idOfLastModifiedItem', toDoObject.toDoId);
-        window.localStorage.setItem('numberOfPrioritizedItems', app.orderNumberOfLastCheckedItem);
-        onUpdate(app.toDoItems, 'xyz-out');
+        app.idOfLastModifiedItem = toDoObject.toDoId;
+        onUpdate('', 'xyz-out');
         setTimeout(function () {
+            window.localStorage.setItem('numberOfPrioritizedItems', app.orderNumberOfLastCheckedItem);
             window.localStorage.setItem(toDoObject.toDoId, JSON.stringify(toDoObject));
-            app.toDoItems = getMyStorage();
-            onUpdate(app.toDoItems, 'xyz-in');
+            app.toDoItems[localStorageObjectIndex] = toDoObject;
+            onUpdate('', 'xyz-in');
         },
             200);
         return;
@@ -126,49 +131,21 @@ function editToDoItem(id) {
         toDoCheckBoxValue: 'unchecked',
         checkingOrderNumber: null
     };
-    app.idOfLastModifiedItem = toDoObject.toDoId;
     window.localStorage.setItem('idOfLastModifiedItem', toDoObject.toDoId);
-    onUpdate(app.toDoItems, 'xyz-out');
+    app.idOfLastModifiedItem = toDoObject.toDoId;
+    onUpdate('', 'xyz-out');
     setTimeout(function () {
         window.localStorage.setItem(toDoObject.toDoId, JSON.stringify(toDoObject));
-        app.toDoItems = getMyStorage();
-        onUpdate(app.toDoItems, 'xyz-in');
+        app.toDoItems[localStorageObjectIndex] = toDoObject;
+        onUpdate('', 'xyz-in');
     },
         200);
 }
 
-//sync
+//Sync Data
 function getSyncData() {
-    app.toDoItems = getMyStorage();
+    app.toDoItems = getMyStorage('localStorageArgs');
     app.idOfLastEnteredToDoItem = window.localStorage.getItem('numberOfItems') === null ? 0 : parseInt(window.localStorage.getItem('numberOfItems'));
     app.orderNumberOfLastCheckedItem = window.localStorage.getItem('numberOfPrioritizedItems') === null ? 0 : parseInt(window.localStorage.getItem('numberOfPrioritizedItems'));
     app.idOfLastModifiedItem = window.localStorage.getItem('idOfLastModifiedItem') === null ? '' : window.localStorage.getItem('idOfLastModifiedItem');
-}
-
-//Gets the objects that contain important data of the existing div elements from local storage
-function getMyStorage() {
-    //Extracts keys of the local storage objects and orders them 
-    let keys = Object.keys(localStorage);
-    keys = keys.filter(key => key.includes('toDoItem'));
-    const keyNumbers = [];
-    keys.forEach(key => keyNumbers.push(parseInt(key.slice(8))));
-    keyNumbers.sort(function (a, b) {
-        return a - b;
-    });
-
-    //Fills the toDoObject array with the sorted local storage objects that contain important data of the existing div elements
-    const toDoObjects = [];
-    let priorityToDoObjects = [];
-    keyNumbers.forEach(k => {
-        let toDoObject = JSON.parse(localStorage.getItem(`toDoItem${k}`));
-        if (toDoObject.checkingOrderNumber !== null) {
-            priorityToDoObjects.push(toDoObject);
-        }
-        else {
-            toDoObjects.push(toDoObject);
-        }
-        priorityToDoObjects =
-            priorityToDoObjects.sort((a, b) => parseInt(a.checkingOrderNumber) - parseInt(b.checkingOrderNumber));
-    });
-    return priorityToDoObjects.concat(toDoObjects);
 }

@@ -1,9 +1,8 @@
-//JavaScript source code
 
 //Update page first load
-setToastrOptions();
 getSyncData();
-onUpdate(app.toDoItems,'');
+setToastrOptions();
+onUpdate('');
 setTextIfNoToDoItems();
 
 $('#addTodoButton').click(function () {
@@ -17,7 +16,7 @@ $('#inputForm').submit(function (event) {
 
 //Updates the page when the local storage is modified
 window.addEventListener('storage', (e) => {
-    onUpdate(app.toDoItems, '');
+    onUpdate('localStorageArgs', '');
     setTextIfNoToDoItems();
 });
 
