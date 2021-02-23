@@ -1,8 +1,8 @@
 //Updates the list of div elements
-function onUpdate() {
+function onUpdate(args, animationClass) {
     popElements();
-    const myStorage = getMyStorage();
-    myStorage.forEach(element => addUpdatedToDoItems(element.toDoId, element.contentText, element.toDoCheckBoxValue, parseInt(myStorage[0].checkingOrderNumber)));
+    app.toDoItems = getMyStorage(args);
+    app.toDoItems.forEach(element => addUpdatedToDoItems(element.toDoId, element.contentText, element.toDoCheckBoxValue, element.toDoId === app.idOfLastModifiedItem ? `${animationClass}` : ''));
 }
 
 //Deletes al div elements
@@ -12,27 +12,44 @@ function popElements() {
 }
 
 //Gets the objects that contain important data of the existing div elements from local storage
-function getMyStorage() {
-    //Extracts keys of the local storage objects and orders them 
-    let keys = Object.keys(localStorage);
-    keys = keys.filter(key => key.includes('toDoItem'));
+function getMyStorage(args) {
     const keyNumbers = [];
-    keys.forEach(key => keyNumbers.push(parseInt(key.slice(8))));
-    keyNumbers.sort(function (a, b) {
-        return a - b;
-    });
+
+    if (args === 'localStorageArgs') {
+        //Extracts keys of the local storage objects and orders them
+        let keys = Object.keys(localStorage);
+        keys = keys.filter(key => key.includes('toDoItem'));
+        keys.forEach(key => keyNumbers.push(parseInt(key.slice(8))));
+        keyNumbers.sort(function (a, b) {
+            return a - b;
+        });
+    } else {
+        let objects = app.toDoItems;
+        objects.forEach(object => keyNumbers.push(parseInt(object.toDoId.slice(8))));
+        keyNumbers.sort(function (a, b) {
+            return a - b;
+        });
+    }
 
     //Fills the toDoObject array with the sorted local storage objects that contain important data of the existing div elements
     const toDoObjects = [];
+    let toDoObject;
     let priorityToDoObjects = [];
     keyNumbers.forEach(k => {
-        let toDoObject = JSON.parse(localStorage.getItem(`toDoItem${k}`));
+
+        if (args === 'localStorageArgs') {
+            toDoObject = JSON.parse(localStorage.getItem(`toDoItem${k}`));
+        } else {
+            toDoObject = app.toDoItems.filter(object => object.toDoId === `toDoItem${k}`)[0];
+        }
+
         if (toDoObject.checkingOrderNumber !== null) {
             priorityToDoObjects.push(toDoObject);
         }
         else {
             toDoObjects.push(toDoObject);
         }
+
         priorityToDoObjects =
             priorityToDoObjects.sort((a, b) => parseInt(a.checkingOrderNumber) - parseInt(b.checkingOrderNumber));
     });
@@ -40,9 +57,8 @@ function getMyStorage() {
 }
 
 //Creates div and its children elements and adds them to the parent div element(used when the page is refreshed and when the local storage was modified)
-function addUpdatedToDoItems(toDoItemId, toDoItemText, checkBoxValue) {
+function addUpdatedToDoItems(toDoItemId, toDoItemText, checkBoxValue, animationValue) {
     const idNumber = parseInt(toDoItemId.slice(8));
     app.idOfLastEnteredToDoItem = idNumber;
-    app.orderNumberOfLastCheckedItem = parseInt(JSON.parse(localStorage.getItem('numberOfPrioritizedItems')));
-    createToDoItem(idNumber, toDoItemText, checkBoxValue);
+    createToDoItem(idNumber, toDoItemText, checkBoxValue, animationValue);
 }
