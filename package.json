@@ -11,5 +11,14 @@
   "devDependencies": {
     "lite-server": "^2.5.4"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ioaneduardmarin/web-demo.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/ioaneduardmarin/web-demo/issues"
+  },
+  "homepage": "https://github.com/ioaneduardmarin/web-demo#readme"
 }

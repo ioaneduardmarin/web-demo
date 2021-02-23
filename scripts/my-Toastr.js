@@ -1,5 +1,5 @@
-function setToastrOptions() {
-    toastr.options = {
+module.exports = function setToastrOptions() {
+    window.toastr.options = {
         "closeButton": true,
         "debug": false,
         "newestOnTop": false,
@@ -16,4 +16,4 @@ function setToastrOptions() {
         "showMethod": "fadeIn",
         "hideMethod": "fadeOut"
     };
-}
+};
