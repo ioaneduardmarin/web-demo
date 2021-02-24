@@ -28,18 +28,14 @@ function createToDoItem(idNumber, toDoItemText, checkBoxValue, animationValue) {
 
     //Changes the parent elements' classlist according to the state of the checkbox
     toDoItemDivCheckBox.firstChild.addEventListener('change', function () {
-        if (this.checked) {
-            editToDoItem(toDoItemDivCheckBox.firstChild.id);
-        } else {
-            editToDoItem(toDoItemDivCheckBox.firstChild.id);
-        }
+        editToDoItemCheckBox(toDoItemDivCheckBox.firstChild.id);
     });
 
     //Commit changes after the element loses focus
     toDoItemDivSpan.firstChild.addEventListener('blur',
         function (event) {
             event.preventDefault();
-            editToDoItem(toDoItemDivSpan.firstChild.id);
+            editToDoItemSpan(toDoItemDivSpan.firstChild.id);
             setTextIfNoToDoItems();
         });
 

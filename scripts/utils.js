@@ -69,7 +69,10 @@ function deleteToDoItem(id) {
 
     app.idOfLastModifiedItem = id;
     window.localStorage.setItem('idOfLastModifiedItem', id);
-    onUpdate('', 'xyz-out');
+
+    document.getElementById(id).classList.remove('xyz-in');
+    document.getElementById(id).classList.add('xyz-out');
+
     setTimeout(function () {
         document.querySelector('#toDoList').removeChild(document.getElementById(`${id}`));
         window.localStorage.removeItem(id);
@@ -80,29 +83,32 @@ function deleteToDoItem(id) {
 }
 
 //Edits the span item found with the given id or deletes its parent if span element is empty after edit
-function editToDoItem(id) {
+function editToDoItemSpan(id) {
     let toBeEdited = document.getElementById(id);
     const localStorageObject = app.toDoItems.filter(object => object.toDoId === `toDoItem${id.substr(12)}`)[0];
     const localStorageObjectIndex = app.toDoItems.findIndex(object => object.toDoId === localStorageObject.toDoId);
     let toDoObject = {};
 
-    if (toBeEdited.tagName == 'SPAN') {
-        if (toBeEdited.textContent) {
-            toDoObject = {
-                toDoId: `toDoItem${id.substr(12)}`,
-                contentText: toBeEdited.textContent,
-                toDoCheckBoxValue: localStorageObject.toDoCheckBoxValue,
-                checkingOrderNumber: localStorageObject.checkingOrderNumber
-            };
-
-            window.localStorage.setItem(toDoObject.toDoId, JSON.stringify(toDoObject));
-            app.toDoItems[localStorageObjectIndex] = toDoObject;
-            return;
-        }
-        deleteToDoItem(toDoObject.toDoId);
-        app.toDoItems = app.toDoItems.filter(object => object.toDoId !== toDoObject.toDoId);
+    if (toBeEdited.textContent) {
+        toDoObject = {
+            toDoId: `toDoItem${id.substr(12)}`,
+            contentText: toBeEdited.textContent,
+            toDoCheckBoxValue: localStorageObject.toDoCheckBoxValue,
+            checkingOrderNumber: localStorageObject.checkingOrderNumber
+        };
+        window.localStorage.setItem(toDoObject.toDoId, JSON.stringify(toDoObject));
+        app.toDoItems[localStorageObjectIndex] = toDoObject;
         return;
     }
+    deleteToDoItem(toDoObject.toDoId);
+    app.toDoItems = app.toDoItems.filter(object => object.toDoId !== toDoObject.toDoId);
+}
+
+function editToDoItemCheckBox(id) {
+    let toBeEdited = document.getElementById(id);
+    const localStorageObject = app.toDoItems.filter(object => object.toDoId === `toDoItem${id.substr(12)}`)[0];
+    const localStorageObjectIndex = app.toDoItems.findIndex(object => object.toDoId === localStorageObject.toDoId);
+    let toDoObject = {};
 
     if (toBeEdited.checked) {
         app.orderNumberOfLastCheckedItem++;
@@ -114,7 +120,10 @@ function editToDoItem(id) {
         };
         window.localStorage.setItem('idOfLastModifiedItem', toDoObject.toDoId);
         app.idOfLastModifiedItem = toDoObject.toDoId;
-        onUpdate('', 'xyz-out');
+
+        document.getElementById(toDoObject.toDoId).classList.remove('xyz-in');
+        document.getElementById(toDoObject.toDoId).classList.add('xyz-out');
+
         setTimeout(function () {
             window.localStorage.setItem('numberOfPrioritizedItems', app.orderNumberOfLastCheckedItem);
             window.localStorage.setItem(toDoObject.toDoId, JSON.stringify(toDoObject));
@@ -122,24 +131,27 @@ function editToDoItem(id) {
             onUpdate('', 'xyz-in');
         },
             200);
-        return;
-    }
 
-    toDoObject = {
-        toDoId: `toDoItem${id.substr(12)}`,
-        contentText: localStorageObject.contentText,
-        toDoCheckBoxValue: 'unchecked',
-        checkingOrderNumber: null
-    };
-    window.localStorage.setItem('idOfLastModifiedItem', toDoObject.toDoId);
-    app.idOfLastModifiedItem = toDoObject.toDoId;
-    onUpdate('', 'xyz-out');
-    setTimeout(function () {
-        window.localStorage.setItem(toDoObject.toDoId, JSON.stringify(toDoObject));
-        app.toDoItems[localStorageObjectIndex] = toDoObject;
-        onUpdate('', 'xyz-in');
-    },
-        200);
+    } else {
+        toDoObject = {
+            toDoId: `toDoItem${id.substr(12)}`,
+            contentText: localStorageObject.contentText,
+            toDoCheckBoxValue: 'unchecked',
+            checkingOrderNumber: null
+        };
+        window.localStorage.setItem('idOfLastModifiedItem', toDoObject.toDoId);
+        app.idOfLastModifiedItem = toDoObject.toDoId;
+
+        document.getElementById(toDoObject.toDoId).classList.remove('xyz-in');
+        document.getElementById(toDoObject.toDoId).classList.add('xyz-out');
+
+        setTimeout(function () {
+            window.localStorage.setItem(toDoObject.toDoId, JSON.stringify(toDoObject));
+            app.toDoItems[localStorageObjectIndex] = toDoObject;
+            onUpdate('', 'xyz-in');
+        },
+            200);
+    }
 }
 
 //Sync Data

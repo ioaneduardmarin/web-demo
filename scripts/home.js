@@ -1,4 +1,3 @@
-
 //Update page first load
 getSyncData();
 setToastrOptions();
