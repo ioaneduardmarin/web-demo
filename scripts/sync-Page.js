@@ -1,13 +1,8 @@
-//Updates the list of div elements
-function onUpdate(args, animationClass) {
-    popElements();
-    app.toDoItems = getMyStorage(args);
-    app.toDoItems.forEach(element => addUpdatedToDoItems(element.toDoId, element.contentText, element.toDoCheckBoxValue, element.toDoId === app.idOfLastModifiedItem ? `${animationClass}` : ''));
-}
+const globalState = require('./global-State.js');
 
 //Deletes al div elements
 function popElements() {
-    let toDoItems = document.querySelectorAll('#toDoList > .toDoItem');
+    let toDoItems = window.document.querySelectorAll('#toDoList > .toDoItem');
     toDoItems.forEach(element => element.parentNode.removeChild(element));
 }
 
@@ -17,14 +12,14 @@ function getMyStorage(args) {
 
     if (args === 'localStorageArgs') {
         //Extracts keys of the local storage objects and orders them
-        let keys = Object.keys(localStorage);
+        let keys = Object.keys(window.localStorage);
         keys = keys.filter(key => key.includes('toDoItem'));
         keys.forEach(key => keyNumbers.push(parseInt(key.slice(8))));
         keyNumbers.sort(function (a, b) {
             return a - b;
         });
     } else {
-        let objects = app.toDoItems;
+        let objects = globalState.app.toDoItems;
         objects.forEach(object => keyNumbers.push(parseInt(object.toDoId.slice(8))));
         keyNumbers.sort(function (a, b) {
             return a - b;
@@ -38,9 +33,9 @@ function getMyStorage(args) {
     keyNumbers.forEach(k => {
 
         if (args === 'localStorageArgs') {
-            toDoObject = JSON.parse(localStorage.getItem(`toDoItem${k}`));
+            toDoObject = JSON.parse(window.localStorage.getItem(`toDoItem${k}`));
         } else {
-            toDoObject = app.toDoItems.filter(object => object.toDoId === `toDoItem${k}`)[0];
+            toDoObject = globalState.app.toDoItems.filter(object => object.toDoId === `toDoItem${k}`)[0];
         }
 
         if (toDoObject.checkingOrderNumber !== null) {
@@ -56,9 +51,16 @@ function getMyStorage(args) {
     return priorityToDoObjects.concat(toDoObjects);
 }
 
-//Creates div and its children elements and adds them to the parent div element(used when the page is refreshed and when the local storage was modified)
-function addUpdatedToDoItems(toDoItemId, toDoItemText, checkBoxValue, animationValue) {
-    const idNumber = parseInt(toDoItemId.slice(8));
-    app.idOfLastEnteredToDoItem = idNumber;
-    createToDoItem(idNumber, toDoItemText, checkBoxValue, animationValue);
+//Sync Data
+function getSyncData() {
+    globalState.app.toDoItems = getMyStorage('localStorageArgs');
+    globalState.app.idOfLastEnteredToDoItem = window.localStorage.getItem('numberOfItems') === null ? 0 : parseInt(window.localStorage.getItem('numberOfItems'));
+    globalState.app.orderNumberOfLastCheckedItem = window.localStorage.getItem('numberOfPrioritizedItems') === null ? 0 : parseInt(window.localStorage.getItem('numberOfPrioritizedItems'));
+    globalState.app.idOfLastModifiedItem = window.localStorage.getItem('idOfLastModifiedItem') === null ? '' : window.localStorage.getItem('idOfLastModifiedItem');
+}
+
+module.exports= {
+    popElements: popElements,
+    getMyStorage: getMyStorage,
+    getSyncData: getSyncData
 }
