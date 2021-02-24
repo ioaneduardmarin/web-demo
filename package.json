@@ -4,12 +4,24 @@
   "description": "My TODO App",
   "main": "script.js",
   "scripts": {
-    "start": "lite-server"
+    "start": "lite-server",
+    "dev": "parcel index.html",
+    "build": "parcel build index.html"
   },
   "author": "Marin Eduard",
   "license": "ISC",
   "devDependencies": {
-    "lite-server": "^2.6.1"
+    "lite-server": "^2.6.1",
+    "parcel-bundler": "^1.12.4"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ioaneduardmarin/web-demo.git"
+  },
+  "keywords": [],
+  "bugs": {
+    "url": "https://github.com/ioaneduardmarin/web-demo/issues"
+  },
+  "homepage": "https://github.com/ioaneduardmarin/web-demo#readme"
 }

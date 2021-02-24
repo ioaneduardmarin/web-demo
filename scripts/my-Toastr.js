@@ -17,3 +17,5 @@ function setToastrOptions() {
         "hideMethod": "fadeOut"
     };
 }
+
+module.exports = { setToastrOptions: setToastrOptions}
